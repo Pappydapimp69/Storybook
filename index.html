@@ -98,6 +98,7 @@ select.btn{padding:0 6px;font-size:.85rem}
 .hud .pop.bad{background:var(--accent)}
 @media (prefers-reduced-motion:no-preference){.hud .pop{animation:popup 1.6s ease-out forwards}}
 @keyframes popup{0%{opacity:0;transform:translate(-50%,-4px)}15%{opacity:1;transform:translate(-50%,4px)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,10px)}}
+.trick.qhide{visibility:hidden}
 </style>
 </head>
 <body>
@@ -105,13 +106,13 @@ select.btn{padding:0 6px;font-size:.85rem}
 <div class="shell">
   <main class="book" aria-label="There's Someone in the Box, a picture-book film">
     <header class="top"><div class="av" aria-hidden="true">C</div><b>Charlie</b><small>+1 (804) 451-8249 · Text message</small></header>
-    <div class="hud" id="hud" aria-live="polite"><span>⏱ <b>0s</b> wasted</span><span>🛡 ●●●</span><span>⭐ <b>90</b></span></div>
+    <div class="hud" id="hud" aria-live="polite"><span>🔍 <b>0</b> spotted</span><span>🛡 ●●●</span><span>⭐ <b>60</b></span></div>
     <div class="art" id="art"></div>
         <button class="splash" id="splash" type="button" aria-label="Tap to start with sound"><span class="sbig">There's Someone in the Box</span><span class="stap">Tap to start ♪</span></button>
     <div class="poster" id="poster">
       <button id="play2" type="button">▶ Play</button><button id="play" type="button" hidden>Watch</button>
       <div class="t">There's Someone in the Box</div>
-      <div class="s">Waste the scammer's time. Keep your 3 shields. Every yes costs one. · sound on</div>
+      <div class="s">Spot Charlie's tricks. Keep your 3 shields: every yes to a scammer costs one. · sound on</div>
     </div>
     <div class="words" id="words" aria-live="polite"></div>
     <div class="say" id="say" aria-live="polite"></div>

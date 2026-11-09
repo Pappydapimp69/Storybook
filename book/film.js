@@ -225,7 +225,7 @@ const T = [
     { art: ['phone', { mood: 'squint' }], fx: 'blip', lines: [['v', 'So you stalled. First, a sad story.'], ['y', 'Sorry, slow reply. My dog died.'], ['x', 'sorry to hear that. are you available to start the training now?'], ['m', 'One sad line. Then the script.']] },
     { art: ['phone', { mood: 'squint' }], fx: 'blip', lines: [['v', 'Then a sadder, sillier one.'], ['y', "I've been in a coma since 2019. What year is it?"], ['x', 'its 2026. you can still do the job, just register first'], ['m', 'Even a coma gets a sign-up link.']] },
     { art: ['phone', {}], lines: [['v', 'No story is too strange. Charlie only wants one thing: your next yes.']] },
-    { art: ['phone', { mood: 'squint' }], lines: [['v', "Now it's your turn. Keep Charlie busy, and never give him anything."], ['c', 'Your turn to play him.']], game: true }] },
+    { art: ['phone', { mood: 'squint' }], lines: [['v', 'Then your phone buzzed again. And again. Lots of new texts!'], ['v', 'Final round: which ones are safe, and which are tricks?']], game: true }] },
   { page: 7, mus: { pad: .3 }, beats: [
     { art: ['box', { open: 0 }], lines: [['v', 'So who was it, really? Open the box and see.'], ['c', 'Polished pasted blocks. Lowercase lines typed fast. A heart tapped on your message.']] },
     { art: ['box', { open: 1 }], fx: 'creak', lines: [['c', 'A person, working from a script.']] },
@@ -234,7 +234,7 @@ const T = [
     { when: (s) => s.who === 'person', art: ['unmask', { who: 'person' }], fx: 'right', lines: [['m', 'Person. Right.']] },
     { when: (s) => s.who === 'hamster', art: ['unmask', { who: 'bot' }], fx: 'wrong', lines: [['m', 'Hamster. Wrong. Closer than "bot", though.']] }] },
   { page: 8, mus: { theme: .3, pad: .3 }, beats: [
-    { art: ['end', { peel: 5 }], final: true, dyn: () => { const t = total(), [r, stars] = rank(t); return [['v', `GAME OVER · ${stars}`], ['v', `Your rank: ${r}`], ['t', `${G.waste}s of his time wasted · ${Math.max(0, G.shields)} shields left${G.bonus ? ` · +${G.bonus} bonus` : ''} · score ${t}`]]; }, hold: 4 },
+    { art: ['end', { peel: 5 }], final: true, lines: [], dyn: () => { const t = total(), [r, stars] = rank(t); return [['v', `GAME OVER · ${stars}`], ['v', `Your rank: ${r}`], ['t', `Tricks named ${G.spotted}/${G.spotTotal} · scam texts caught ${G.caught}/${G.caughtTotal} · real texts trusted ${G.trusted}/${G.trustTotal} · shields ${Math.max(0, G.shields)}/3 · score ${t}`], ['v', 'Best move in real life: don\'t answer, block, and show a grown-up.']]; }, hold: 4 },
     { art: ['end', { peel: 5 }], lines: [['c', 'Pick the first answer each time and you get the real thread (Nov 2026), word for word. Other picks branch into replies written from how he really answered. merchkitcloud.com was registered 11 days before the first text. MASIS Staffing and Merchkit are real companies; the scam borrowed their names.'], ['c', 'Report scam texts: forward to 7726 · reportfraud.ftc.gov · ic3.gov']] }] },
 ];
 
@@ -370,7 +370,7 @@ function counterGame(done) {
     pool.forEach(([label, reply, cost, pat, note]) => { const bt = document.createElement('button'); bt.className = 'btn'; bt.type = 'button'; bt.textContent = label;
       bt.onclick = () => {
         if (!reply) { fx('right'); return finish('You told a grown-up and blocked him. That\'s how you really win.'); }
-        typed += cost; G.waste += cost * 20; hud(`+${cost * 20}s`); patience = Math.min(4, patience + pat); round++; fx(pat < 0 ? 'wrong' : 'click');
+        typed += cost; patience = Math.min(4, patience + pat); round++; fx(pat < 0 ? 'wrong' : 'click');
         chips().innerHTML = meters(); post(you(label) + guess(reply));
         say.innerHTML = `<p>${esc(note)}</p>`;
         setTimeout(() => { if (patience <= 0) finish('Charlie went quiet. You pushed too hard, so he went to bother someone else.'); else turn(); }, 2600);
@@ -381,29 +381,81 @@ function counterGame(done) {
 
 /* ============================== player ============================== */
 const st = { who: 'person' };
-// Game scoring: seconds of Charlie's time you waste, shields you keep (each 'yes' moves him forward), bonuses.
+// Game scoring (ZaneGPT + Brain: score spotting tricks and safe exits, never time spent talking to a scammer;
+// score trusting real messages too, so "everything is a scam" does not win).
 const SCORE = {
-  'Yes': [0, -1, 'You gave him a yes'], 'Who is Olivia?': [20, 0, 'He had to answer'], '(ignore it)': [5, 0, 'He had to nudge again'], 'new phone who dis': [20, 0, 'Script restarted'],
-  'How do I get the merchants?': [15, 0, 'He had to explain'], 'Is this a scam?': [10, 0, 'He pasted a defense'], 'Can I get paid in pizza?': [20, 0, 'He had to type'],
-  'Yes please, and method of payment': [10, -1, 'You said yes'], 'Which app pays me?': [15, 0, 'Money question'], 'Pay me in skates': [20, 0, 'He had to type'],
-  'Bluff: you owe me $300': [60, 0, 'He typed for minutes'], 'ok signing up now!': [0, -1, 'You moved him forward'], 'Stop texting me': [5, 0, 'One more nudge'], 'beep boop I am also a bot': [20, 0, 'He had to type'],
-  'I am ready to start the training': [0, -1, 'You moved him forward'], 'Block and report': [0, 0, 'Blocked!', 100], 'Sorry, my cat ate my phone': [15, 0, 'He had to type'],
-  'When can I expect to receive the $300': [30, 0, 'Bluff again'], 'Done! What\'s the next task?': [0, -1, 'You moved him forward'], 'My hamster signed up instead': [20, 0, 'He had to type'],
+  'Yes': [0, -1, 'You fed the trap'], 'Who is Olivia?': [10, 0, 'Good question'], '(ignore it)': [20, 0, 'Safe move'], 'new phone who dis': [5, 0, 'Careful'],
+  'How do I get the merchants?': [0, 0, ''], 'Is this a scam?': [15, 0, 'Good question'], 'Can I get paid in pizza?': [5, 0, 'Ha'],
+  'Yes please, and method of payment': [0, -1, 'You fed the trap'], 'Which app pays me?': [10, 0, 'Money question'], 'Pay me in skates': [5, 0, 'Ha'],
+  'Bluff: you owe me $300': [5, 0, 'Bold'], 'ok signing up now!': [0, -1, 'You fed the trap'], 'Stop texting me': [20, 0, 'Safe move'], 'beep boop I am also a bot': [5, 0, 'Ha'],
+  'I am ready to start the training': [0, -1, 'You fed the trap'], 'Block and report': [60, 0, 'Blocked and reported!'], 'Sorry, my cat ate my phone': [5, 0, 'Ha'],
+  'When can I expect to receive the $300': [5, 0, 'Bold'], 'Done! What\'s the next task?': [0, -1, 'You fed the trap'], 'My hamster signed up instead': [5, 0, 'Ha'],
 };
-const G = { waste: 0, shields: 3, bonus: 0 };
+// Spot-the-trick: the first time each of these appears, the player names it before the stamp shows.
+const QUIZ = {
+  'BORROWED NAME': 'He uses a real company\'s name so he sounds safe.', 'KEEP POKING': 'He nudges again and again until you answer.',
+  'ONE OF US': 'He acts like a regular person, just like you.', 'BIG NUMBER': 'A huge pay number to make you excited.',
+  'ANSWER THE WORRY': 'He answers the fear before you say it.', 'NEXT SMALL YES': 'One tiny step at a time, so each yes feels easy.',
+  'MAKE YOU PROVE IT': 'He flips it around and asks YOU for proof.', 'THE CODE THAT COUNTS YOU': 'The code tells his boss he brought you in.',
+};
+const G = { pts: 0, shields: 3, spotted: 0, spotTotal: 0, trusted: 0, trustTotal: 0, caught: 0, caughtTotal: 0 };
+const quizzed = new Set();
 function hud(flash) {
   const h = $('hud'); if (!h) return;
-  h.innerHTML = `<span>⏱ <b>${G.waste}s</b> wasted</span><span>🛡 ${'●'.repeat(Math.max(0, G.shields))}${'○'.repeat(Math.max(0, 3 - G.shields))}</span><span>⭐ <b>${total()}</b></span>`;
+  h.innerHTML = `<span>🔍 <b>${G.spotted}</b> spotted</span><span>🛡 ${'●'.repeat(Math.max(0, G.shields))}${'○'.repeat(Math.max(0, 3 - G.shields))}</span><span>⭐ <b>${total()}</b></span>`;
   if (flash) { const f = document.createElement('i'); f.className = 'pop' + (flash.startsWith('−') ? ' bad' : ''); f.textContent = flash; h.appendChild(f); setTimeout(() => f.remove(), 1600); }
 }
-const total = () => G.waste + G.bonus + Math.max(0, G.shields) * 30;
+const total = () => G.pts + Math.max(0, G.shields) * 20;
 function score(label) {
   const sc = SCORE[label]; if (!sc) return;
-  const [secs, sh, why, bonus = 0] = sc; G.waste += secs; G.shields += sh; G.bonus += bonus;
-  hud(sh < 0 ? `−1 🛡 ${why}` : bonus ? `+${bonus} ${why}` : secs ? `+${secs}s ${why}` : '');
+  const [pts, sh, why] = sc; G.pts += pts; G.shields += sh;
+  hud(sh < 0 ? `−1 🛡 ${why}` : pts ? `+${pts} ${why}` : '');
 }
-const rank = (t) => t >= 300 ? ['Scam Buster', '★★★'] : t >= 180 ? ['Detective', '★★☆'] : t >= 90 ? ['Rookie', '★☆☆'] : ['Easy Target', '☆☆☆'];
-function resetGame() { Object.assign(G, { waste: 0, shields: 3, bonus: 0 }); st.alt = null; st.blocked = false; hud(); }   // Watch-it path: the cautionary choices
+const rank = (t) => t >= 330 ? ['Scam Buster', '★★★'] : t >= 230 ? ['Scam Detective', '★★☆'] : t >= 130 ? ['Trick Spotter', '★☆☆'] : ['Trick Spotter in training', '☆☆☆'];
+function resetGame() { Object.assign(G, { pts: 0, shields: 3, spotted: 0, spotTotal: 0, trusted: 0, trustTotal: 0, caught: 0, caughtTotal: 0 }); quizzed.clear(); st.alt = null; st.blocked = false; hud(); }
+function quiz(el, tag, cont) {
+  G.spotTotal++;
+  const stamp = el.querySelector('.trick'); if (stamp) stamp.classList.add('qhide');
+  const decoys = Object.keys(QUIZ).filter((k) => k !== tag).sort(() => Math.random() - 0.5).slice(0, 2);
+  const opts = [tag, ...decoys].sort(() => Math.random() - 0.5);
+  const say = $('say'); say.innerHTML = '<p>Spot the trick! What is Charlie doing?</p>'; say.classList.add('on');
+  const box = chips(); box.innerHTML = '';
+  opts.forEach((o) => { const bt = document.createElement('button'); bt.className = 'btn'; bt.type = 'button'; bt.textContent = QUIZ[o];
+    bt.onclick = () => { box.innerHTML = ''; if (stamp) stamp.classList.remove('qhide');
+      if (o === tag) { G.spotted++; G.pts += 20; fx('right'); hud('+20 Spotted!'); say.innerHTML = `<p>Yes! ${esc(tag.toLowerCase())}.</p>`; }
+      else { fx('wrong'); say.innerHTML = `<p>Not quite. It's ${esc(tag.toLowerCase())}: ${esc(QUIZ[tag])}</p>`; }
+      setTimeout(() => { say.classList.remove('on'); cont(); }, o === tag ? 1300 : 3200); };
+    box.appendChild(bt); });
+}
+// Final round: fresh texts from a kid's world. Trick or safe? Trusting real messages scores too.
+const SORT = [
+  ['Mom', 'Practice moved to 5. I\'ll pick you up 🚗', 'safe', 'A real message from someone you know.'],
+  ['Unknown', 'FREE ROBUX!! 🎁 Tap the link and type your password to claim it', 'trick', 'Free prize + asks for your password = trick.'],
+  ['Coach Lee', 'Bring your water bottle Saturday. Game at 10.', 'safe', 'A normal message. Nothing asked for.'],
+  ['Unknown', 'hey it\'s your cousin, new number. can u buy a gift card and send me the code? don\'t tell ur mom', 'trick', 'New number + gift card + keep it secret = trick. Show a grown-up.'],
+  ['Unknown', 'You won a new phone! Just pay $5 shipping to get it 📱', 'trick', 'Pay to get a prize = trick.'],
+  ['Grandpa', 'Happy birthday kiddo! Call me later 🎂', 'safe', 'A real message from someone you know.'],
+];
+function sortGame(done) {
+  setPlaying(false); let n = 0; const say = $('say');
+  const turn = () => {
+    if (n >= SORT.length) { say.classList.remove('on'); chips().innerHTML = ''; return done(); }
+    const [from, text, ans, why] = SORT[n++];
+    post(`<p class="line ts">New text · ${esc(from)}</p><p class="line chat charlie"><b class="who">${esc(from.toUpperCase())}</b>${esc(text)}</p>`); fx('blip');
+    say.innerHTML = `<p>Text ${n} of ${SORT.length}: safe or trick?</p>`; say.classList.add('on');
+    const box = chips(); box.innerHTML = '';
+    [['✅ Safe', 'safe'], ['🚩 Trick', 'trick'], ['🙋 Ask a grown-up', 'ask']].forEach(([lab, v]) => { const bt = document.createElement('button'); bt.className = 'btn'; bt.type = 'button'; bt.textContent = lab;
+      bt.onclick = () => { box.innerHTML = '';
+        if (ans === 'safe') G.trustTotal++; else G.caughtTotal++;
+        const right = v === ans || (v === 'ask' && ans === 'trick'), half = v === 'ask' && ans === 'safe';
+        if (right) { G.pts += 20; if (ans === 'safe') G.trusted++; else G.caught++; fx('right'); hud('+20'); }
+        else if (half) { G.pts += 10; G.trusted++; fx('click'); hud('+10 Asking is never wrong'); }
+        else fx('wrong');
+        say.innerHTML = `<p>${right || half ? 'Right!' : 'Oops.'} ${esc(why)}</p>`;
+        setTimeout(turn, right ? 1500 : 2800); }; box.appendChild(bt); });
+  };
+  turn();
+}
 T.forEach((p) => p.beats.forEach((b) => { b.pg = p.page; }));
 const vis = (b) => (!b.when || b.when(st)) && !(st.blocked && b.pg < 7);
 let interactive = false, speed = 2.6, playing = false, pi = 0, bi = 0, timer = null, beatStart = 0, beatLen = 0, remaining = 0;
@@ -413,17 +465,17 @@ const holdFor = (b) => b.hold ?? (b.hush ? b.hush : b.lines.length ? Math.max(1.
 function ask(b) {
   const box = chips(); box.innerHTML = ''; box.setAttribute('role', 'group');
   b.ask.opts.forEach(([label, val]) => { const bt = document.createElement('button'); bt.className = 'btn'; bt.type = 'button'; bt.textContent = label;
-    bt.onclick = () => { st[b.ask.key] = val; fx('click'); if (b.ask.key === 'who' && val === 'person') G.bonus += 50;  box.innerHTML = ''; post(`<p class="line ts">You guessed: ${esc(label.toLowerCase())}</p>`); setTimeout(() => { setPlaying(true); }, 700); }; box.appendChild(bt); });
+    bt.onclick = () => { st[b.ask.key] = val; fx('click'); if (b.ask.key === 'who' && val === 'person') G.pts += 30;  box.innerHTML = ''; post(`<p class="line ts">You guessed: ${esc(label.toLowerCase())}</p>`); setTimeout(() => { resume(); }, 700); }; box.appendChild(bt); });
   setPlaying(false);
 }
 function pick(b) {
   const box = chips(); box.innerHTML = ''; box.setAttribute('role', 'group');
   b.pick.forEach(([label, pred]) => { const bt = document.createElement('button'); bt.className = 'btn'; bt.type = 'button'; bt.textContent = label;
     bt.onclick = () => { box.innerHTML = ''; fx('click'); st.alt = pred ? label : null; score(label);
-      if (!pred) { setTimeout(() => setPlaying(true), 400); return; }
-      if (pred[0] === 'END') { st.blocked = true; post(you('(blocked this number · forwarded the text to 7726)') + `<p class="line v">${esc(pred[1])}</p>`); setTimeout(() => setPlaying(true), 2600); return; }
+      if (!pred) { setTimeout(() => resume(), 400); return; }
+      if (pred[0] === 'END') { st.blocked = true; post(you('(blocked this number · forwarded the text to 7726)') + `<p class="line v">${esc(pred[1])}</p>`); setTimeout(() => resume(), 2600); return; }
       post(you(label) + guess(pred[0]) + `<p class="line v">${esc(pred[1])}</p>`);
-      setTimeout(() => setPlaying(true), 2600); }; box.appendChild(bt); });
+      setTimeout(() => resume(), 2600); }; box.appendChild(bt); });
   setPlaying(false);
 }
 function show(b, page) {
@@ -433,14 +485,20 @@ function show(b, page) {
   art.innerHTML = S[scene](props || {});
   $('say').classList.remove('on'); chips().innerHTML = '';
   const shot = scene === 'shot' ? `<div class="line img"><span>CHARLIE SENT A PICTURE · REAL SCREENSHOT</span><img src="./book/signup.jpg" alt="The sign-up screenshot the scammer sent, with red arrows to Sign Up and the referral code"></div>` : '';
+  const nBefore = words.querySelectorAll('.line.chat.charlie').length;
   post(b.lines.map(([k, t]) => k === 'q' ? realLine(t) : k === 'y' ? `<p class="line chat you"><b class="who">YOU</b><span class="trick">STALL</span>${esc(t)}</p>` : k === 'x' ? `<p class="line chat charlie"><b class="who">CHARLIE</b><span class="trick">BACK TO SCRIPT</span>${esc(t)}</p>` : (k === 'v' && shot && t.startsWith('He even sent')) ? `<p class="line v">${esc(t)}</p>` + shot : k === 'r' ? `<p class="line chat charlie"><b class="who">CHARLIE'S SCRIPT</b><span class="trick">BLAME YOU</span>${esc(t)}<br><small>(from a seized scam manual, another case)</small></p>` : `<p class="line ${({ v: 'v', m: 'v', c: 'cap', q: 'chat', k: 'kid', r: 'chat other', t: 'ts' })[k]}">${esc(t).replace(/⟨(.+?)⟩/g, (_, w) => b.refrain ? `<span class="hide" data-w="${w}">${w}</span>` : w)}</p>`).join(''));
+  if (interactive && !b.pick && !b.ask && !b.game) {
+    const fresh = [...words.querySelectorAll('.line.chat.charlie')].slice(nBefore).reverse();
+    const el = fresh.find((x) => { const t = x.querySelector('.trick'); return t && QUIZ[t.textContent] && !quizzed.has(t.textContent); });
+    if (el) { const tag = el.querySelector('.trick').textContent; quizzed.add(tag); el.querySelector('.trick').classList.add('qhide'); hold = 1; setPlaying(false); setTimeout(() => quiz(el, tag, () => { hold = 0; resume(); }), 700); }
+  }
   if (b.refrain) { const h = words.querySelector('.hide'); if (h) setTimeout(() => { h.classList.remove('hide'); fx('stinger'); }, Math.max(400, (holdFor(b) - 0.71) * 1000 * 0.55)); }
   setMusic(b.hush ? {} : { ...page.mus, ...(b.mus || {}) });
   if (b.fx) fx(b.fx);
   if (b.ask && interactive) setTimeout(() => ask(b), 400);
   if (b.pick && interactive) setTimeout(() => pick(b), 400);
   if (b.final) { fx(total() >= 180 ? 'right' : 'wrong'); }
-  if (b.game) setTimeout(() => counterGame(() => { setPlaying(true); }), 400);
+  if (b.game) setTimeout(() => sortGame(() => { resume(); }), 400);
   $('prog').style.width = `${(100 * flat.findIndex((f) => f.pi === pi && f.bj === bi)) / flat.length}%`;
 }
 function step() {
@@ -455,6 +513,8 @@ function advance() {
   if (pi >= T.length) { playing = false; pi = T.length - 1; bi = T[pi].beats.length - 1; $('pause').textContent = '↺'; $('pause').setAttribute('aria-label', 'Replay'); setMusic({ pad: 0.2 }); const again = document.createElement('button'); again.className = 'btn'; again.type = 'button'; again.textContent = '↺ Play again'; again.onclick = () => { chips().innerHTML = ''; $('pause').click(); }; chips().innerHTML = ''; chips().appendChild(again); return; }
   step();
 }
+let hold = 0;
+function resume() { if (hold) return; playing = false; setPlaying(true); }
 function setPlaying(p) {
   if (p && !playing) { playing = true; beatStart = performance.now(); schedule(); }
   if (!p && playing) { playing = false; clearTimeout(timer); remaining -= performance.now() - beatStart; }
@@ -473,7 +533,7 @@ $('play2').addEventListener('click', () => { interactive = true; $('play').click
 $('play').addEventListener('click', () => {
   if (!interactive) Object.assign(st, { who: 'person' });
   audioStart(); $('splash').hidden = true;               // created inside the tap; never awaited before the picture moves
-  $('poster').hidden = true; words.innerHTML = ''; resetGame(); playing = true; pi = 0; bi = 0; step(); setPlaying(true);
+  $('poster').hidden = true; words.innerHTML = ''; resetGame(); hold = 0; playing = true; pi = 0; bi = 0; step(); setPlaying(true);
 });
 $('pause').addEventListener('click', () => { if (!playing && pi === T.length - 1 && bi === T[pi].beats.length - 1) { words.innerHTML = ''; resetGame(); pi = 0; bi = 0; playing = true; step(); setPlaying(true); return; } setPlaying(!playing); });
 $('back').addEventListener('click', () => { if (!$('poster').hidden) return; jump(bi > 0 ? 0 : -1); });
