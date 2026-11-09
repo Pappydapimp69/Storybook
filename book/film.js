@@ -179,8 +179,8 @@ const S = {
 const T = [
   { page: 1, mus: { pad: .4, theme: .3 }, beats: [
     { art: ['phone', { big: true, buzz: true }], fx: 'blip', lines: [['v', 'One Wednesday, a phone buzzed. A stranger named Charlie said a lady named Olivia sent him.'], ['t', 'Wed 1:46 pm'], ['q', OPENER]] },
-    { art: ['phone', { buzz: true }], fx: 'blip', lines: [['v', 'Who was really on the other end? Make your guess.'], ['v', 'Nobody answered. So Charlie knocked again. And again.'], ['t', 'Thu 8:32 am · Fri 10:10 am'], ['q', 'Hi, I haven\'t heard back from you at all since the beginning, so I\'d like to confirm whether you\'re still interested in remote work.']] },
-    { art: ['cups', {}], lines: [['v', 'On Saturday morning, it was time to answer.'], ['m', 'Who\'s typing?']], ask: { key: 'who', opts: [['A bot', 'bot'], ['A recruiter', 'rec'], ['A person', 'person'], ['A very fast hamster', 'hamster']] } }] },
+    { art: ['phone', { buzz: true }], fx: 'blip', lines: [['v', 'Nobody answered. So Charlie knocked again. And again.'], ['t', 'Thu 8:32 am · Fri 10:10 am'], ['q', 'Hi, I haven\'t heard back from you at all since the beginning, so I\'d like to confirm whether you\'re still interested in remote work.']] },
+    { art: ['cups', {}], lines: [['v', 'On Saturday morning, it was time to answer.'], ['v', 'Who was really on the other end? Make your guess.']], ask: { key: 'who', opts: [['A bot', 'bot'], ['A recruiter', 'rec'], ['A person', 'person'], ['A very fast hamster', 'hamster']] } }] },
   { page: 2, mus: { machine: .3, pad: .2 }, beats: [
     { art: ['phone', { mood: 'up' }], lines: [['m', 'Your reply?']], pick: [['Yes', null], ['Who is Olivia?', ['Olivia from our staffing team passed your number along. Are you still interested in this opportunity?', 'A pasted answer that dodges the question.']], ['(ignore it)', ['Hi, I haven\'t heard back from you, so I\'d like to confirm whether you\'re still interested in remote work.', 'One nudge a day, mid-morning.']], ['new phone who dis', ['Hi, I\'m Charlie. Are you still interested in remote work?', 'The script just restarts.']]] },
     { art: ['phone', {}], lines: [['t', 'Sat 8:30 am'], ['q', 'Yes']] },
