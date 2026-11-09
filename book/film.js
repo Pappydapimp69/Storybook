@@ -218,6 +218,9 @@ const T = [
     { art: ['phone', { mood: 'squint' }], lines: [['m', 'Seven hours later. Your move.']], pick: [['When can I expect to receive the $300', null], ['Done! What\'s the next task?', ['Great. Let me know when you\'re ready to start the training.', 'Eager gets a warm, fast reply.']], ['Block and report', ['(nothing; the number is blocked)', 'The move that ends it. Forward to 7726.']], ['My hamster signed up instead', ['send me a screenshot', 'Weird gets a demand for proof.']]] },
     { art: ['phone', {}], lines: [['t', 'Mon 2:32 am'], ['q', 'When can I expect to receive the $300']] },
     { art: ['silence', {}], lines: [['t', 'No reply yet.']], hush: 2 },
+    { art: ['phone', { mood: 'squint' }], fx: 'blip', lines: [['v', 'So you stalled. First, a sad story.'], ['y', 'Sorry, slow reply. My dog died.'], ['x', 'sorry to hear that. are you available to start the training now?'], ['m', 'One sad line. Then the script.']] },
+    { art: ['phone', { mood: 'squint' }], fx: 'blip', lines: [['v', 'Then a sadder, sillier one.'], ['y', "I've been in a coma since 2019. What year is it?"], ['x', 'its 2026. you can still do the job, just register first'], ['m', 'Even a coma gets a sign-up link.']] },
+    { art: ['phone', {}], lines: [['v', 'No story is too strange. Charlie only wants one thing: your next yes.']] },
     { art: ['phone', { mood: 'squint' }], lines: [['v', "Now it's your turn. Keep Charlie busy, and never give him anything."], ['c', 'Your turn to play him.']], game: true }] },
   { page: 7, mus: { pad: .3 }, beats: [
     { art: ['box', { open: 0 }], lines: [['v', 'So who was it, really? Open the box and see.'], ['c', 'Polished pasted blocks. Lowercase lines typed fast. A heart tapped on your message.']] },
@@ -391,7 +394,7 @@ function show(b, page) {
   art.innerHTML = S[scene](props || {});
   const say = $('say'), ml = b.lines.filter(([k]) => k === 'm');
   say.innerHTML = ml.map(([, t]) => `<p>${esc(t)}</p>`).join(''); say.classList.toggle('on', ml.length > 0);
-  words.innerHTML = b.lines.filter(([k]) => k !== 'm').map(([k, t]) => k === 'q' ? realLine(t) : k === 'r' ? `<p class="line chat charlie"><b class="who">CHARLIE'S SCRIPT</b><span class="trick">BLAME YOU</span><br>${esc(t)}<br><small>(from a seized scam manual, another case)</small></p>` : `<p class="line ${({ v: '', m: 'mags', c: 'cap', q: 'chat', k: 'kid', r: 'chat other', t: 'ts' })[k]}">${esc(t).replace(/⟨(.+?)⟩/g, (_, w) => b.refrain ? `<span class="hide" data-w="${w}">${w}</span>` : w)}</p>`).join('');
+  words.innerHTML = b.lines.filter(([k]) => k !== 'm').map(([k, t]) => k === 'q' ? realLine(t) : k === 'y' ? `<p class="line chat you pred"><b class="who">YOU · STORY MOVE</b><span class="trick">SAD STORY</span><br>${esc(t)}</p>` : k === 'x' ? `<p class="line chat charlie pred"><b class="who">CHARLIE · PREDICTED</b><span class="trick">BACK TO SCRIPT</span><br>${esc(t)}</p>` : k === 'r' ? `<p class="line chat charlie"><b class="who">CHARLIE'S SCRIPT</b><span class="trick">BLAME YOU</span><br>${esc(t)}<br><small>(from a seized scam manual, another case)</small></p>` : `<p class="line ${({ v: '', m: 'mags', c: 'cap', q: 'chat', k: 'kid', r: 'chat other', t: 'ts' })[k]}">${esc(t).replace(/⟨(.+?)⟩/g, (_, w) => b.refrain ? `<span class="hide" data-w="${w}">${w}</span>` : w)}</p>`).join('');
   requestAnimationFrame(() => words.querySelectorAll('.line').forEach((el, i) => setTimeout(() => el.classList.add('on'), 250 * i)));
   if (b.refrain) { const h = words.querySelector('.hide'); if (h) setTimeout(() => { h.classList.remove('hide'); fx('stinger'); }, Math.max(400, (holdFor(b) - 0.71) * 1000 * 0.55)); }
   setMusic(b.hush ? {} : { ...page.mus, ...(b.mus || {}) });
