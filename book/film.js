@@ -176,69 +176,47 @@ const S = {
 /* ============================== timeline ============================== */
 // type: v = verse, m = Mags, c = How we know, q = quote from the chat. art = [scene, props]. hush = designed silence (s).
 const T = [
-  { page: 'cold', mus: { pad: .2 }, beats: [
-    { art: ['jar', { amount: 47 }], fx: 'clink', lines: [['k', 'Forty-seven. Skates are a hundred and nine. Saturday.']] },
-    { art: ['jar', { amount: 47, ding: true }], fx: 'blip', lines: [['t', 'Wed 1:46 pm']], hold: 1.2 }] },
   { page: 1, mus: { pad: .4, theme: .3 }, beats: [
-    { art: ['phone', { big: true, buzz: true }], fx: 'blip', lines: [['q', OPENER]] },
-    { art: ['phone', { mood: 'up' }], lines: [['k', 'Olivia? Who\'s Olivia?'], ['m', 'New number. Old owner\'s mail.']] },
+    { art: ['phone', { big: true, buzz: true }], fx: 'blip', lines: [['t', 'Wed 1:46 pm'], ['q', OPENER]] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['t', 'Thu 8:32 am · Fri 10:10 am'], ['q', 'Hi, I haven\'t heard back from you at all since the beginning, so I\'d like to confirm whether you\'re still interested in remote work.']] },
-    { art: ['cups', {}], lines: [['m', 'Three days of nudges. Who\'s typing? Bet.']], ask: { key: 'who', opts: [['A bot', 'bot'], ['A recruiter', 'rec'], ['A person', 'person'], ['A very fast hamster', 'hamster']] } }] },
+    { art: ['cups', {}], lines: [['m', 'Who\'s typing?']], ask: { key: 'who', opts: [['A bot', 'bot'], ['A recruiter', 'rec'], ['A person', 'person'], ['A very fast hamster', 'hamster']] } }] },
   { page: 2, mus: { machine: .3, pad: .2 }, beats: [
-    { art: ['jar', { amount: 47, mood: 'worry' }], lines: [['t', 'Sat 8:30 am'], ['q', 'Yes']] },
+    { art: ['phone', {}], lines: [['t', 'Sat 8:30 am'], ['q', 'Yes']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['t', '8:33 am'], ['q', 'This job is actually more of a part time role, and it\'s a side gig I\'m doing myself']] },
-    { art: ['stack', { n: 3, clock: '19 s · 9 s' }], fx: 'thunk', lines: [['t', '8:51 am · three cards in 28 seconds'], ['m', 'Fast typer?']] }] },
+    { art: ['stack', { n: 3, clock: '19 s · 9 s' }], fx: 'thunk', lines: [['t', '8:51 am · three long messages in 28 seconds'], ['q', 'Company Name: Merchkit']] }] },
   { page: 3, mus: { theme: .4, pad: .3 }, beats: [
     { art: ['phone', {}], lines: [['t', '3:17 pm'], ['q', 'How do I get the merchants and their product info']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['q', 'All our work is done through the company\'s work hub. There are thousands of products waiting to be optimized every day.']] },
     { art: ['phone', {}], lines: [['t', '3:51 pm'], ['q', 'That sounds like something I can do'], ['c', 'Charlie tapped ❤️ on your message.']] },
-    { art: ['phone', { buzz: true, mood: 'up' }], fx: 'blip', lines: [['q', 'sure, its easy and flexible, can i now share with you our working hours and the pay?'], ['m', 'Lowercase now. Hm.']] }] },
-  { page: 4, mus: { theme: .4, pad: .3 }, beats: [
+    { art: ['phone', { buzz: true }], fx: 'blip', lines: [['q', 'sure, its easy and flexible, can i now share with you our working hours and the pay?']] },
     { art: ['phone', {}], lines: [['q', 'Yes please, and method of payment']] },
-    { art: ['phone', { buzz: true }], fx: 'blip', lines: [['q', 'The monthly base pay is $2800, plus separate product based profits.'], ['k', 'Skates by Tuesday!']] },
-    { art: ['phone', { mood: 'squint' }], lines: [['m', 'You asked how. Did he answer?'], ['k', '…He skipped it.']] },
+    { art: ['phone', { buzz: true }], fx: 'blip', lines: [['q', 'The monthly base pay is $2800, plus separate product based profits.'], ['c', 'The payment question was skipped.']] }] },
+  { page: 4, mus: { pad: .3, arp: .3 }, beats: [
     { art: ['phone', {}], lines: [['t', 'Sun 10:52 am'], ['q', 'How am I compensated. What is the method of payment']] },
-    { art: ['phone', { buzz: true }], fx: 'blip', lines: [['q', 'You won\'t need to provide me or the company with any personal or banking information, so there\'s no need to worry'], ['m', 'Still not how.']] }] },
-  { page: 5, mus: { machine: .5, hole: .2 }, beats: [
-    { art: ['machine', { bar: 95, balance: '$ 12.00', sign: 'If you sign up (FTC reports, not your chat):' }], fx: 'coin', lines: [['k', 'It paid me twelve bucks!']] },
-    { art: ['machine', { bar: 95, balance: '−$ 40.00', sign: 'DOUBLE TASK! Top up to finish your set.' }], fx: 'hit', mus: { hole: .5 }, lines: [['k', 'Minus forty?!'], ['m', 'Jar\'s right there.']], ask: { key: 'coins', opts: [['Top up from the jar', 'top'], ['Walk away', 'walk'], ['Feed it a button', 'button']] } },
-    { when: (s) => s.coins === 'top', art: ['jar', { amount: 23, mood: 'worry' }], fx: 'crunch', mus: { hole: .8 }, lines: [['k', 'Eight. Then sixteen. It went DOWN.']] },
-    { when: (s) => s.coins === 'top', art: ['jar', { amount: 7, mood: 'scared' }], fx: 'crunch', mus: { hole: .9 }, lines: [['r', 'Why don\'t you listen to me? … Your random operations led to the account being frozen.'], ['k', 'That was my skate money.']] },
-    { when: (s) => s.coins === 'walk', art: ['walkaway', {}], fx: 'right', lines: [['k', 'Nope. Not paying to get paid.']] },
-    { when: (s) => s.coins === 'button', art: ['machine', { bar: 95, balance: 'INVALID COIN', sign: 'Real money only, please.' }], fx: 'wrong', lines: [['m', 'It only eats real money. Funny how that works.']] },
-    { art: ['machine', { bar: 95, balance: '???' }], lines: [['v', 'If you pay to get paid, then the paying\'s the ⟨job⟩.']], refrain: true }] },
-  { page: 6, mus: { pad: .3, arp: .4 }, beats: [
-    { art: ['phone', {}], lines: [['t', 'Sun 11:45 am'], ['q', 'What\'s the next step']] },
-    { art: ['phone', { buzz: true }], fx: 'blip', lines: [['q', 'Next, I\'ll show you how to register your work account on the company\'s Workhub.'], ['k', 'Okay, Charlie. Let\'s see.']] },
+    { art: ['phone', { buzz: true }], fx: 'blip', lines: [['q', 'You won\'t need to provide me or the company with any personal or banking information, so there\'s no need to worry'], ['c', 'Still no method.']] },
+    { art: ['phone', {}], lines: [['t', '11:45 am'], ['q', 'What\'s the next step']] },
+    { art: ['phone', { buzz: true }], fx: 'blip', lines: [['q', 'Next, I\'ll show you how to register your work account on the company\'s Workhub.']] }] },
+  { page: 5, mus: { pad: .3, arp: .4 }, beats: [
     { art: ['phone', { mood: 'squint' }], lines: [['t', '11:46:49'], ['q', 'I have already completed my work for the day though and I\'m owed $300. Please provide me withdrawal instructions']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['t', '8 seconds later'], ['q', 'After you finish the training, you can start using your work account to work and earn money. Are you available to start the training now?']] },
-    { art: ['phone', { buzz: true, mood: 'up' }], fx: 'blip', lines: [['t', '34 seconds later'], ['q', 'we havent even started , which work are you referring to?'], ['m', 'Shiny, then scrappy. Two Charlies?']] },
+    { art: ['phone', { buzz: true }], fx: 'blip', lines: [['t', '34 seconds later'], ['q', 'we havent even started , which work are you referring to?']] },
     { art: ['phone', {}], lines: [['q', 'The work you gave me earlier. In a different session.']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['t', '3 min 38 s later'], ['q', 'send me a screenshot i see']] },
     { art: ['phone', {}], lines: [['q', 'Show me an example of what that would look like'], ['q', 'How do I start training?']] },
     { art: ['silence', {}], lines: [['t', '3 hours 18 minutes of nothing']], hush: 2.5 }] },
-  { page: 7, mus: { pad: .3 }, beats: [
-    { art: ['box', { open: 0 }], lines: [['v', 'Pull the doors, pull them back, pull them open real wide—']] },
-    { art: ['box', { open: 1 }], fx: 'creak', lines: [['v', 'it\'s a box with a smile and a person ⟨inside⟩.']], refrain: true },
-    { when: (s) => s.who === 'bot', art: ['unmask', { who: 'bot' }], fx: 'wrong', lines: [['m', 'Bot? Then who tapped the heart?']] },
-    { when: (s) => s.who === 'rec', art: ['unmask', { who: 'rec' }], fx: 'wrong', lines: [['m', 'Recruiter? MASIS is real. Whose name is that?']] },
-    { when: (s) => s.who === 'person', art: ['unmask', { who: 'person' }], fx: 'right', lines: [['m', 'Person. Right. Now look behind them.']] },
-    { when: (s) => s.who === 'hamster', art: ['unmask', { who: 'bot' }], fx: 'wrong', lines: [['m', 'Hamster. Wrong. But closer than "bot".']] },
-    { art: ['rack', {}], fx: 'stinger', lines: [['q', 'a side gig I\'m doing myself'], ['k', '…It wasn\'t just me.']] }] },
-  { page: 8, mus: { boss: .6 }, beats: [
-    { art: ['boss', {}], fx: 'steps', lines: [['v', 'There\'s a boss at their back and a board on the wall,'], ['v', 'and a count they must hit, or they pay for it all.']] },
-    { art: ['boss', {}], lines: [['k', 'Should I text them?'], ['m', 'Your move.']], ask: { key: 'worker', opts: [['Text them: are you OK?', 'text'], ['Tell someone who can help', 'report'], ['Send them a cat video', 'cat']] } },
-    { when: (s) => s.worker === 'text', art: ['readsit', {}], fx: 'wrong', lines: [['m', 'Who reads it first?']] },
-    { when: (s) => s.worker === 'report', art: ['reported', {}], fx: 'right', lines: [['m', 'The boss never sees that one. First crack.']] },
-    { when: (s) => s.worker === 'cat', art: ['readsit', { cat: true }], fx: 'wrong', lines: [['m', 'The boss watched it twice. Then deleted it. Cute. Not help.']] }] },
-  { page: 9, mus: { theme: .5, pad: .3 }, beats: [
+  { page: 6, mus: { theme: .4, pad: .3 }, beats: [
     { art: ['phone', {}], lines: [['t', 'Sun 3:04 pm'], ['q', 'I am ready to start the training when you are']] },
-    { art: ['phone', { buzz: true }], fx: 'blip', lines: [['t', '6 minutes later'], ['q', 'When you register, you\'ll need to enter my referral code: O6V7OH'], ['m', 'Back like nothing happened.']] },
-    { when: (s) => s.coins === 'top', art: ['rink', { amount: 7, skates: false }], lines: [['k', 'Saturday. Seven dollars. No skates.']] },
-    { when: (s) => s.coins !== 'top', art: ['shovel', {}], lines: [['k', 'Three driveways. Twenty each. Ow.'], ['m', 'Who paid who this time?']] },
-    { when: (s) => s.coins !== 'top', art: ['rink', { amount: 0, skates: true }], fx: 'right', lines: [['k', 'Saturday. Skates!']] },
-    { art: ['end', { peel: 4 }], lines: [['k', 'No thanks. I don\'t pay to get paid.'], ['m', 'Pretend coins. Real box.']] },
-    { art: ['end', { peel: 5 }], lines: [['c', 'Every REAL TEXT line is from the real thread (Nov 2026). The "frozen" line is from a seized scam manual (Reuters, Dec 2025). MASIS Staffing and Merchkit are real companies; the scam borrowed their names. Grown-ups: forward scam texts to 7726 · reportfraud.ftc.gov · ic3.gov · if someone may be forced to scam: 1-888-373-7888.']] }] },
+    { art: ['phone', { buzz: true }], fx: 'blip', lines: [['t', '6 minutes later'], ['q', 'When you register, you\'ll need to enter my referral code: O6V7OH']] },
+    { art: ['phone', { buzz: true }], fx: 'blip', lines: [['q', 'If you run into any issues during registration, just take a screenshot and send it to me.']] }] },
+  { page: 7, mus: { pad: .3 }, beats: [
+    { art: ['box', { open: 0 }], lines: [['c', 'Polished pasted blocks. Lowercase lines typed fast. A heart tapped on your message.']] },
+    { art: ['box', { open: 1 }], fx: 'creak', lines: [['c', 'A person, working from a script.']] },
+    { when: (s) => s.who === 'bot', art: ['unmask', { who: 'bot' }], fx: 'wrong', lines: [['m', 'Bot? Then who tapped the heart?']] },
+    { when: (s) => s.who === 'rec', art: ['unmask', { who: 'rec' }], fx: 'wrong', lines: [['m', 'Recruiter? MASIS Staffing is real. The scam borrowed its name.']] },
+    { when: (s) => s.who === 'person', art: ['unmask', { who: 'person' }], fx: 'right', lines: [['m', 'Person. Right.']] },
+    { when: (s) => s.who === 'hamster', art: ['unmask', { who: 'bot' }], fx: 'wrong', lines: [['m', 'Hamster. Wrong. Closer than "bot", though.']] }] },
+  { page: 8, mus: { theme: .3, pad: .3 }, beats: [
+    { art: ['end', { peel: 5 }], lines: [['c', 'Every chat line is copied from the real thread (Nov 2026). merchkitcloud.com was registered 11 days before the first text. MASIS Staffing and Merchkit are real companies; the scam borrowed their names.'], ['c', 'Report scam texts: forward to 7726 · reportfraud.ftc.gov · ic3.gov']] }] },
 ];
 
 /* ============================== audio ============================== */
@@ -328,7 +306,7 @@ function realLine(t) {
 }
 
 /* ============================== player ============================== */
-const st = { who: 'bot', worker: 'text', coins: 'top' };   // Watch-it path: the cautionary choices
+const st = { who: 'person' };   // Watch-it path: the cautionary choices
 const vis = (b) => !b.when || b.when(st);
 let interactive = false, speed = 2.6, playing = false, pi = 0, bi = 0, timer = null, beatStart = 0, beatLen = 0, remaining = 0;
 const flat = []; T.forEach((p, i) => p.beats.forEach((b, j) => flat.push({ pi: i, bj: j })));
@@ -342,7 +320,7 @@ function ask(b) {
 }
 function show(b, page) {
   if (b.dyn) b = { ...b, lines: b.dyn(st) };
-  if (b.art[0] === 'end') { const good = (st.who === 'person') + (st.worker === 'report') + (st.coins === 'walk'); b = { ...b, art: ['end', { ...b.art[1], peel: Math.min(5, b.art[1].peel - 1 + good), who: st.who, worker: st.worker, coins: st.coins }] }; }
+  if (false) { const good = (st.who === 'person') + (st.worker === 'report') + (st.coins === 'walk'); b = { ...b, art: ['end', { ...b.art[1], peel: Math.min(5, b.art[1].peel - 1 + good), who: st.who, worker: st.worker, coins: st.coins }] }; }
   const [scene, props] = b.art;
   art.innerHTML = S[scene](props || {});
   const say = $('say'), ml = b.lines.filter(([k]) => k === 'm');
@@ -383,7 +361,7 @@ $('splash').addEventListener('click', () => {
 });
 $('play2').addEventListener('click', () => { interactive = true; $('play').click(); });
 $('play').addEventListener('click', () => {
-  if (!interactive) Object.assign(st, { who: 'bot', worker: 'text', coins: 'top' });
+  if (!interactive) Object.assign(st, { who: 'person' });
   audioStart(); $('splash').hidden = true;               // created inside the tap; never awaited before the picture moves
   $('poster').hidden = true; playing = true; pi = 0; bi = 0; step(); setPlaying(true);
 });
