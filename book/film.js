@@ -166,6 +166,7 @@ const S = {
     <g transform="translate(320 196)"><path d="M-26 -50 h52 v42 q0 8 -8 8 h-36 q-8 0 -8 -8z" class="k-glass" stroke="var(--ink)" stroke-width="2"/><text x="0" y="-58" text-anchor="middle" font-size="13" class="t" font-weight="800">$${o.amount}</text></g>
     ${reader(270, 150, 1, o.skates ? 'glad' : 'worry')}${o.skates ? `<path d="M244 206 h40 l5 -10 h-45z" class="k-acc"/><circle cx="252" cy="210" r="4" class="k-ink"/><circle cx="278" cy="210" r="4" class="k-ink"/>` : ''}`, o.skates ? 'Saturday: the kid has skates at the rink window' : 'Saturday: an empty jar and the rink lights through a window'),
   shovel: () => svg(`<path d="M0 200 Q100 170 200 196 T400 186 V260 H0z" fill="#FFFFFF" opacity=".9"/>${reader(170, 150, 1, 'glad')}<path d="M196 160 l40 40 M226 196 l20 -6 l-6 20z" class="s-ink" stroke-width="4"/>${[0, 1, 2].map((i) => `<g transform="translate(${60 + i * 120} 60)"><rect x="-26" y="-20" width="52" height="34" class="k-page" stroke="var(--ink)" stroke-width="2"/><path d="M-30 -20 l30 -18 l30 18z" class="k-acc"/><text x="0" y="32" font-size="9" text-anchor="middle" class="k-ok" font-weight="800" style="font-family:var(--sans)">+$20 ✓</text></g>`).join('')}`, 'The kid shoveling three driveways for twenty dollars each'),
+  shot: () => `<svg viewBox="0 0 400 260" role="img" aria-label="The sign-up screenshot the scammer sent, with red arrows to Sign Up and the referral code"><rect width="400" height="260" class="k-ink"/><image href="./book/signup.jpg" x="0" y="28" width="400" height="180" preserveAspectRatio="xMidYMid meet"/><text x="200" y="236" text-anchor="middle" font-size="11" font-weight="800" style="fill:var(--page);font-family:var(--sans)">SENT BY CHARLIE · REAL SCREENSHOT</text></svg>`,
   unmask: (o) => svg(`${box(200, 140, { open: 1, inside: `<rect x="-58" y="-32" width="116" height="92" class="k-page"/>${worker(0, 34, 0.85)}` })}${o.who === 'bot' ? mask(92, 196) : o.who === 'rec' ? peeledTag(96, 190) : lens(96, 186, 1.2)}${mags(340, 186, 1, o.who === 'person' ? 'wink' : 'squint')}`, 'The box open; what you guessed lies on the floor'),
   readsit: (o) => svg(`${quota(26, 30)}${door(318, 118)}${worker(170, 176, 1)}${boss(250, 150, 1)}${phone(268, 96, { screen: o.cat ? '<text x="0" y="6" font-size="22" text-anchor="middle">🐈</text>' : textBox(-19, -30, 38, ['are you', 'OK?'], { fs: 7, lh: 9 }) })}${textBox(18, 112, 120, ['The boss reads it', 'first.'], { fs: 9 })}`, 'The boss holding the phone and reading your message'),
   reported: () => svg(`${box(110, 150, { open: 0 })}<path d="M86 104 l14 22 l-10 14" class="s-acc" stroke-width="3"/><path d="M190 120 q60 -60 140 -50" fill="none" class="s-soft" stroke-width="2" stroke-dasharray="5 5"/>${envelope(240, 90)}<g transform="translate(340 150)"><rect x="-34" y="-60" width="68" height="70" class="k-page" stroke="var(--ink)" stroke-width="2.4"/><path d="M-40 -60 l40 -22 l40 22z" class="k-hatch" stroke="var(--ink)" stroke-width="2"/><text x="0" y="-20" text-anchor="middle" font-size="9" class="t" font-weight="800">REPORTS</text></g>`, 'Your report flies out to the people who can shut the box down; the box cracks'),
@@ -181,14 +182,17 @@ const T = [
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['t', 'Thu 8:32 am · Fri 10:10 am'], ['q', 'Hi, I haven\'t heard back from you at all since the beginning, so I\'d like to confirm whether you\'re still interested in remote work.']] },
     { art: ['cups', {}], lines: [['m', 'Who\'s typing?']], ask: { key: 'who', opts: [['A bot', 'bot'], ['A recruiter', 'rec'], ['A person', 'person'], ['A very fast hamster', 'hamster']] } }] },
   { page: 2, mus: { machine: .3, pad: .2 }, beats: [
+    { art: ['phone', { mood: 'up' }], lines: [['m', 'Your reply?']], pick: [['Yes', null], ['Who is Olivia?', ['Olivia from our staffing team passed your number along. Are you still interested in this opportunity?', 'A pasted answer that dodges the question.']], ['(ignore it)', ['Hi, I haven\'t heard back from you, so I\'d like to confirm whether you\'re still interested in remote work.', 'One nudge a day, mid-morning.']], ['new phone who dis', ['Hi, I\'m Charlie. Are you still interested in remote work?', 'The script just restarts.']]] },
     { art: ['phone', {}], lines: [['t', 'Sat 8:30 am'], ['q', 'Yes']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['t', '8:33 am'], ['q', 'This job is actually more of a part time role, and it\'s a side gig I\'m doing myself']] },
     { art: ['stack', { n: 3, clock: '19 s · 9 s' }], fx: 'thunk', lines: [['t', '8:51 am · three long messages in 28 seconds'], ['q', 'Company Name: Merchkit']] }] },
   { page: 3, mus: { theme: .4, pad: .3 }, beats: [
+    { art: ['phone', { mood: 'up' }], lines: [['m', 'Ask him something.']], pick: [['How do I get the merchants?', null], ['Is this a scam?', ['Our company is a legitimate e-commerce platform. Many people work with us every day.', 'A smooth answer was written before you asked.']], ['Can I get paid in pizza?', ['It\'s daily paid, I\'ll guide you on how to withdraw.', 'Off-script questions get the nearest card.']]] },
     { art: ['phone', {}], lines: [['t', '3:17 pm'], ['q', 'How do I get the merchants and their product info']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['q', 'All our work is done through the company\'s work hub. There are thousands of products waiting to be optimized every day.']] },
     { art: ['phone', {}], lines: [['t', '3:51 pm'], ['q', 'That sounds like something I can do'], ['c', 'Charlie tapped ❤️ on your message.']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['q', 'sure, its easy and flexible, can i now share with you our working hours and the pay?']] },
+    { art: ['phone', { mood: 'up' }], lines: [['m', 'He offers the pay. You say?']], pick: [['Yes please, and method of payment', null], ['Which app pays me?', ['You\'ll see after the training. No need to worry.', 'The money question gets dodged.']], ['Pay me in skates', ['The monthly base pay is $2800, plus separate product based profits.', 'He pastes the pay card anyway.']]] },
     { art: ['phone', {}], lines: [['q', 'Yes please, and method of payment']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['q', 'The monthly base pay is $2800, plus separate product based profits.'], ['c', 'The payment question was skipped.']] }] },
   { page: 4, mus: { pad: .3, arp: .3 }, beats: [
@@ -197,6 +201,7 @@ const T = [
     { art: ['phone', {}], lines: [['t', '11:45 am'], ['q', 'What\'s the next step']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['q', 'Next, I\'ll show you how to register your work account on the company\'s Workhub.']] }] },
   { page: 5, mus: { pad: .3, arp: .4 }, beats: [
+    { art: ['phone', { mood: 'squint' }], lines: [['m', 'Your move.']], pick: [['Bluff: you owe me $300', null], ['ok signing up now!', ['great, let me know when you are done', 'Eager gets a fast, warm reply.']], ['Stop texting me', ['Hi, have you completed your registration?', 'One more nudge tomorrow, then quiet.']], ['beep boop I am also a bot', ['send me a screenshot', 'Weird gets a demand for proof.']]] },
     { art: ['phone', { mood: 'squint' }], lines: [['t', '11:46:49'], ['q', 'I have already completed my work for the day though and I\'m owed $300. Please provide me withdrawal instructions']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['t', '8 seconds later'], ['q', 'After you finish the training, you can start using your work account to work and earn money. Are you available to start the training now?']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['t', '34 seconds later'], ['q', 'we havent even started , which work are you referring to?']] },
@@ -205,8 +210,10 @@ const T = [
     { art: ['phone', {}], lines: [['q', 'Show me an example of what that would look like'], ['q', 'How do I start training?']] },
     { art: ['silence', {}], lines: [['t', '3 hours 18 minutes of nothing']], hush: 2.5 }] },
   { page: 6, mus: { theme: .4, pad: .3 }, beats: [
+    { art: ['phone', { mood: 'up' }], lines: [['m', 'Three hours of silence. Now?']], pick: [['I am ready to start the training', null], ['Block and report', ['(nothing; the number is blocked)', 'Best move. Forward it to 7726.']], ['Sorry, my cat ate my phone', ['Hi, are you still interested in remote work?', 'Any reply keeps you on the list.']]] },
     { art: ['phone', {}], lines: [['t', 'Sun 3:04 pm'], ['q', 'I am ready to start the training when you are']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['t', '6 minutes later'], ['q', 'When you register, you\'ll need to enter my referral code: O6V7OH']] },
+    { art: ['shot', {}], lines: [['c', 'His how-to: Sign Up, then the referral code box. The code tells his boss who brought you in.']], hold: 5 },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['q', 'If you run into any issues during registration, just take a screenshot and send it to me.']] }] },
   { page: 7, mus: { pad: .3 }, beats: [
     { art: ['box', { open: 0 }], lines: [['c', 'Polished pasted blocks. Lowercase lines typed fast. A heart tapped on your message.']] },
@@ -318,6 +325,16 @@ function ask(b) {
     bt.onclick = () => { st[b.ask.key] = val; fx('click'); $('say').innerHTML = '<p>Locked in. Keep watching.</p>'; $('say').classList.add('on'); box.remove(); setTimeout(() => { setPlaying(true); }, 700); }; box.appendChild(bt); });
   words.appendChild(box); setPlaying(false);
 }
+function pick(b) {
+  const box = document.createElement('div'); box.className = 'bar'; box.setAttribute('role', 'group');
+  b.pick.forEach(([label, pred]) => { const bt = document.createElement('button'); bt.className = 'btn'; bt.type = 'button'; bt.textContent = label;
+    bt.onclick = () => { box.remove(); fx('click'); const say = $('say');
+      if (!pred) { say.innerHTML = '<p>That\'s what you really sent.</p>'; say.classList.add('on'); setTimeout(() => setPlaying(true), 900); return; }
+      words.innerHTML = `<p class="line chat charlie pred on"><b class="who">CHARLIE · PREDICTED</b><br>${esc(pred[0])}</p>`;
+      say.innerHTML = `<p>${esc(pred[1])} You really sent something else:</p>`; say.classList.add('on');
+      setTimeout(() => setPlaying(true), 4200); }; box.appendChild(bt); });
+  words.appendChild(box); setPlaying(false);
+}
 function show(b, page) {
   if (b.dyn) b = { ...b, lines: b.dyn(st) };
   if (false) { const good = (st.who === 'person') + (st.worker === 'report') + (st.coins === 'walk'); b = { ...b, art: ['end', { ...b.art[1], peel: Math.min(5, b.art[1].peel - 1 + good), who: st.who, worker: st.worker, coins: st.coins }] }; }
@@ -331,6 +348,7 @@ function show(b, page) {
   setMusic(b.hush ? {} : { ...page.mus, ...(b.mus || {}) });
   if (b.fx) fx(b.fx);
   if (b.ask && interactive) setTimeout(() => ask(b), 400);
+  if (b.pick && interactive) setTimeout(() => pick(b), 400);
   $('prog').style.width = `${(100 * flat.findIndex((f) => f.pi === pi && f.bj === bi)) / flat.length}%`;
 }
 function step() {
