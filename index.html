@@ -16,99 +16,99 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Patrick+Hand&family=Nunito:wght@600;800&display=swap">
 <style>
-/* Woodcut: black ink on bone paper, one blood-orange accent for wrong answers, the coin slot and the boss's edge. */
 :root{
   --desk:#F3C78F; --page:#FFF6E6; --ink:#4A2A14; --soft:#8A5A35; --hatch:#F2B77F; --accent:#D2553A; --ok:#4E9A64;
-  --brass:#E0A21E; --glow:#FFE7A3; --shadow:#2B1A10; --glass:#FFF0D6; --sky1:#FFD98E; --sky2:#F59E5B; --ground:#D88F5C; --ground2:#C67C4B; --night:#3A2A4A;
+  --brass:#E0A21E; --glow:#FFE7A3; --shadow:#2B1A10; --glass:#EFE3CF; --sky1:#FFD98E; --sky2:#F59E5B; --ground:#D88F5C; --ground2:#C67C4B; --night:#3A2A4A;
+  --me:#2F7CF6; --me-ink:#fff; --top:#FBEFDB;
   --serif:"Fredoka","Nunito",system-ui,sans-serif; --sans:"Nunito",system-ui,sans-serif; --hand:"Patrick Hand","Comic Sans MS",cursive;
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --desk:#1E2046; --page:#2C2F5C; --ink:#F3EEFF; --soft:#C3BCE6; --hatch:#565A9E; --accent:#FF8A7A; --ok:#8EE0A8;
-  --brass:#FFCB6B; --glow:#FFE3A3; --shadow:#0E0F26; --glass:#3D3768; --sky1:#2B3160; --sky2:#4A4C8C; --ground:#3E3F7A; --ground2:#34356A; --night:#1A1B3A; color-scheme:dark}}
-:root[data-theme="dark"]{--desk:#1E2046; --page:#2C2F5C; --ink:#F3EEFF; --soft:#C3BCE6; --hatch:#565A9E; --accent:#FF8A7A; --ok:#8EE0A8;
-  --brass:#FFCB6B; --glow:#FFE3A3; --shadow:#0E0F26; --glass:#3D3768; --sky1:#2B3160; --sky2:#4A4C8C; --ground:#3E3F7A; --ground2:#34356A; --night:#1A1B3A; color-scheme:dark}
+  --desk:#1E2046; --page:#23264D; --ink:#F3EEFF; --soft:#C3BCE6; --hatch:#565A9E; --accent:#FF8A7A; --ok:#8EE0A8;
+  --brass:#FFCB6B; --glow:#FFE3A3; --shadow:#0E0F26; --glass:#3A3D6E; --sky1:#2B3160; --sky2:#4A4C8C; --ground:#3E3F7A; --ground2:#34356A; --night:#1A1B3A;
+  --me:#3B82F6; --me-ink:#fff; --top:#2C2F5C; color-scheme:dark}}
+:root[data-theme="dark"]{--desk:#1E2046; --page:#23264D; --ink:#F3EEFF; --soft:#C3BCE6; --hatch:#565A9E; --accent:#FF8A7A; --ok:#8EE0A8;
+  --brass:#FFCB6B; --glow:#FFE3A3; --shadow:#0E0F26; --glass:#3A3D6E; --sky1:#2B3160; --sky2:#4A4C8C; --ground:#3E3F7A; --ground2:#34356A; --night:#1A1B3A;
+  --me:#3B82F6; --me-ink:#fff; --top:#2C2F5C; color-scheme:dark}
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;background:var(--desk);color:var(--ink);font-family:var(--sans)}
-.shell{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
-  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 18px}
-.book{position:relative;width:100%;max-width:880px;background:var(--page);border-radius:26px;overflow:hidden;box-shadow:0 14px 40px rgba(0,0,0,.35)}
-.art{position:relative;aspect-ratio:400/260;max-width:100%}
-.art svg{display:block;width:100%;height:100%}
-.words{min-height:132px;padding:14px 22px 6px;display:flex;flex-direction:column;justify-content:center;gap:6px}
-.line{font-family:var(--serif);font-size:clamp(1.25rem,3vw,1.7rem);line-height:1.38;text-align:center;margin:0;opacity:0;transform:translateY(4px);transition:opacity .25s,transform .25s}
+.shell{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px}
+.book{position:relative;width:100%;max-width:460px;height:min(calc(100dvh - 48px),860px);min-height:480px;background:var(--page);border-radius:30px;overflow:hidden;
+  box-shadow:0 14px 40px rgba(0,0,0,.35);border:8px solid var(--shadow);display:flex;flex-direction:column}
+.top{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 12px 8px;background:var(--top);border-bottom:1px solid var(--hatch)}
+.top .av{width:44px;height:44px;border-radius:50%;background:var(--soft);color:var(--page);display:grid;place-items:center;font:700 1.3rem var(--serif)}
+.top b{font:800 .95rem var(--sans)} .top small{font-size:.72rem;color:var(--soft)}
+.art{display:none}
+.words{flex:1;overflow-y:auto;padding:12px 12px 8px;display:flex;flex-direction:column;gap:6px;scroll-behavior:smooth}
+.line{margin:0;opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s}
 .line.on{opacity:1;transform:none}
-.say{position:absolute;left:4%;right:30%;top:4%;z-index:2;background:var(--page);border:3px solid var(--ink);border-radius:22px;padding:10px 14px;font:400 clamp(1rem,2.4vw,1.3rem)/1.3 var(--hand);color:var(--ink);box-shadow:0 4px 0 rgba(0,0,0,.12);opacity:0;transition:opacity .25s}
-.say.on{opacity:1}
-.say p{margin:0}.say p+p{margin-top:6px}
-.say::after{content:"";position:absolute;right:-16px;bottom:16px;border:10px solid transparent;border-left:16px solid var(--ink)}
-@media (max-width:560px){.say{right:4%;font-size:1rem}}
-.line.cap{font-family:var(--sans);font-size:.88rem;color:var(--soft);text-align:left}
-.line.cap::before{content:"HOW WE KNOW · ";font-weight:800;letter-spacing:.06em;font-size:.72rem}
-.line.chat{font-family:var(--sans);font-size:1rem;text-align:left;background:var(--glass);border-radius:16px 16px 16px 4px;padding:8px 12px}
-.line.chat::before{content:none!important}
-.line.chat{font-family:var(--sans);font-size:clamp(.95rem,2.4vw,1.1rem);text-align:left;max-width:86%;padding:8px 12px;border-radius:16px;border:2px solid var(--ink)}
-.line.chat.charlie{align-self:flex-start;background:var(--glass);border-bottom-left-radius:4px}
-.line.chat.you{align-self:flex-end;background:var(--hatch);border-bottom-right-radius:4px}
-.line.chat .who{font-size:.72rem;letter-spacing:.08em}
-.line.chat .trick{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:999px;font:800 .66rem/1.6 var(--sans);letter-spacing:.06em;background:var(--accent);color:var(--page);transform:rotate(-2deg)}
-.line.chat small{color:var(--soft)}
-.line.kid::before{content:"YOU, THINKING: "!important}
-.line.kid{font-style:italic;opacity:.9}
-.line.chat.pred{border-style:dashed;opacity:.92}
-.line.ts{font-family:var(--sans);font-size:.78rem;font-weight:800;letter-spacing:.06em;color:var(--soft);text-align:left}
-.line.kid{font-family:var(--hand);font-size:clamp(1.15rem,2.8vw,1.45rem);text-align:right}
-.line.kid::before{content:"YOU: ";font-family:var(--sans);font-weight:800;font-size:.75rem;color:var(--accent)}
-.line.other::before{content:"REAL SCRIPT · OTHER CASE · "!important}
-.line.chat::before{content:"REAL TEXT · ";font-family:var(--sans);font-weight:800;letter-spacing:.06em;font-size:.72rem;color:var(--soft)}
-.hide{color:transparent;text-shadow:none;border-bottom:3px dashed var(--accent)}
-.bar{display:flex;align-items:center;gap:8px;padding:8px 14px 14px;flex-wrap:wrap}
-.btn{font:800 1rem var(--sans);min-height:48px;min-width:48px;padding:0 16px;border-radius:999px;border:2px solid var(--ink);background:var(--page);color:var(--ink);cursor:pointer}
+.line.v{align-self:center;text-align:center;max-width:92%;font:400 1.02rem/1.35 var(--serif);color:var(--ink);padding:6px 4px}
+.line.cap{align-self:center;text-align:center;max-width:92%;font-size:.78rem;color:var(--soft)}
+.line.cap::before{content:"HOW WE KNOW · ";font-weight:800;letter-spacing:.06em;font-size:.68rem}
+.line.ts{align-self:center;font-size:.72rem;font-weight:800;color:var(--soft);padding-top:8px}
+.line.mags{align-self:center;text-align:center;max-width:88%;font:400 1.1rem/1.3 var(--hand);background:var(--glow);color:#4A2A14;border-radius:14px;padding:6px 12px}
+.line.mags::before{content:"MAGS: ";font:800 .68rem var(--sans);letter-spacing:.06em}
+.line.kid{align-self:flex-end;text-align:right;max-width:80%;font:400 1.05rem var(--hand);color:var(--soft)}
+.line.kid::before{content:"YOU, THINKING: ";font:800 .66rem var(--sans);color:var(--accent)}
+.line.chat{max-width:80%;padding:8px 12px;border-radius:20px;font:600 1rem/1.35 var(--sans)}
+.line.chat .who{display:block;font-size:.6rem;letter-spacing:.08em;opacity:.75;margin-bottom:1px}
+.line.chat .who+br{display:none}
+.line.chat.charlie{align-self:flex-start;background:var(--glass);color:var(--ink);border-bottom-left-radius:6px}
+.line.chat.you{align-self:flex-end;background:var(--me);color:var(--me-ink);border-bottom-right-radius:6px}
+.line.chat.pred{background:transparent;border:2px dashed var(--soft);color:var(--ink)}
+.line.chat.you.pred{border-color:var(--me)}
+.line.chat .trick{display:table;margin:0 0 4px 0;padding:1px 8px;border-radius:999px;font:800 .62rem/1.6 var(--sans);letter-spacing:.06em;background:var(--accent);color:#fff}
+.line.chat small{opacity:.75}
+.line.img{align-self:flex-start;max-width:78%;background:var(--glass);border-radius:18px;padding:4px}
+.line.img img{display:block;width:100%;border-radius:14px}
+.line.img span{display:block;font:800 .6rem var(--sans);letter-spacing:.06em;color:var(--soft);padding:4px 6px 2px}
+.typing{align-self:flex-start;background:var(--glass);border-radius:20px;padding:10px 14px;display:flex;gap:4px}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--soft);opacity:.5}
+@media (prefers-reduced-motion:no-preference){.typing i{animation:pulse 1s ease-in-out infinite}.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}}
+.say{margin:0 10px;padding:6px 12px;border-radius:14px;background:var(--glow);color:#4A2A14;font:400 1.05rem/1.3 var(--hand);text-align:center}
+.say:not(.on){display:none}
+.say p{margin:0}
+.chips{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;padding:6px 10px}
+.chips:empty{display:none}
+.chips .meter{flex-basis:100%;text-align:center;font-size:.7rem;font-weight:800;color:var(--soft)}
+.chips .btn{border-color:var(--me);color:var(--me);background:transparent;min-height:44px;font-size:.92rem}
+.bar{display:flex;align-items:center;gap:6px;padding:8px 10px 10px;border-top:1px solid var(--hatch);background:var(--top)}
+.btn{font:800 1rem var(--sans);min-height:44px;min-width:44px;padding:0 14px;border-radius:999px;border:2px solid var(--ink);background:var(--page);color:var(--ink);cursor:pointer}
 .btn.main{background:var(--ink);color:var(--page)}
 .btn:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
-.prog{flex:1;min-width:80px;height:6px;background:var(--hatch);border-radius:3px;overflow:hidden}
-.prog i{display:block;height:100%;width:0;background:var(--accent)}
-select.btn{padding:0 10px}
+.prog{flex:1;min-width:40px;height:6px;background:var(--hatch);border-radius:3px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--me)}
+select.btn{padding:0 6px;font-size:.85rem}
 [hidden]{display:none!important}
 .splash{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;border:0;cursor:pointer;background:linear-gradient(var(--sky1),var(--sky2));color:var(--ink);font-family:var(--serif)}
-.splash .sbig{font:700 clamp(1.6rem,5vw,2.6rem) var(--serif);text-align:center;padding:0 16px}
+.splash .sbig{font:700 clamp(1.6rem,6vw,2.4rem) var(--serif);text-align:center;padding:0 16px}
 .splash .stap{font:800 1.2rem var(--sans);padding:16px 32px;border-radius:999px;border:3px solid var(--ink);background:var(--page)}
 .splash:focus-visible{outline:4px solid var(--accent);outline-offset:-8px}
 @media (prefers-reduced-motion:no-preference){.splash .stap{animation:pulse 1.4s ease-in-out infinite}}
-.poster{position:absolute;top:0;left:0;right:0;aspect-ratio:400/260;display:grid;place-items:center;z-index:3}
-.poster button{font:800 1.3rem var(--sans);min-height:80px;padding:0 34px;border-radius:999px;border:0;background:var(--ink);color:var(--page);box-shadow:0 0 0 6px rgba(0,0,0,.15);cursor:pointer}
-.poster .t{position:absolute;left:0;right:0;bottom:12%;text-align:center;font:700 clamp(1.3rem,4vw,2.2rem) var(--serif);color:var(--ink);text-shadow:0 0 12px var(--page)}
-.poster .s{position:absolute;left:0;right:0;bottom:6%;text-align:center;font:500 .95rem var(--sans);color:var(--soft)}
-.note{font-size:.8rem;color:#bba;max-width:880px;text-align:center;margin:0}
-.k-ink{fill:var(--ink)} .k-page{fill:var(--page)} .k-soft{fill:var(--soft)} .k-hatch{fill:var(--hatch)} .k-acc{fill:var(--accent)} .k-brass{fill:var(--brass)} .k-glow{fill:var(--glow)} .k-glass{fill:var(--glass)} .k-ok{fill:var(--ok)}
-.s-ink{stroke:var(--ink);fill:none;stroke-linecap:round;stroke-linejoin:round} .s-acc{stroke:var(--accent);fill:none} .s-soft{stroke:var(--soft);fill:none}
-.t{font-family:var(--sans);fill:var(--ink)} .tser{font-family:var(--serif);fill:var(--ink)}
-@media (prefers-reduced-motion:no-preference){
-  .bob{animation:bob 3s ease-in-out infinite} .buzz{animation:buzz .18s linear infinite} .fall{animation:fall .6s ease-out both}
-  .flick{animation:flick 1.6s steps(2) infinite} .spin{animation:spin 4s linear infinite} .pulse{animation:pulse 1.4s ease-in-out infinite}
-}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-@keyframes buzz{0%,100%{transform:translateX(0)}50%{transform:translateX(1.5px)}}
-@keyframes fall{from{transform:translateY(-60px);opacity:0}to{transform:none;opacity:1}}
-@keyframes flick{0%{opacity:1}50%{opacity:.75}}
-@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
-.bob,.buzz,.fall{transform-box:fill-box;transform-origin:50% 100%}
+.poster{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:var(--page);padding:20px;text-align:center}
+.poster button{font:800 1.2rem var(--sans);min-height:64px;padding:0 30px;border-radius:999px;border:0;background:var(--me);color:#fff;cursor:pointer}
+.poster .t{font:700 clamp(1.4rem,6vw,2rem) var(--serif)} .poster .s{font:500 .9rem var(--sans);color:var(--soft)}
+.note{font-size:.78rem;color:var(--soft);max-width:460px;text-align:center;margin:0}
+@keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
 </style>
 </head>
 <body>
 
 <div class="shell">
   <main class="book" aria-label="There's Someone in the Box, a picture-book film">
+    <header class="top"><div class="av" aria-hidden="true">C</div><b>Charlie</b><small>+1 (804) 451-8249 · Text message</small></header>
     <div class="art" id="art"></div>
-    <div class="say" id="say" aria-live="polite"></div>
-    <button class="splash" id="splash" type="button" aria-label="Tap to start with sound"><span class="sbig">There's Someone in the Box</span><span class="stap">Tap to start ♪</span></button>
+        <button class="splash" id="splash" type="button" aria-label="Tap to start with sound"><span class="sbig">There's Someone in the Box</span><span class="stap">Tap to start ♪</span></button>
     <div class="poster" id="poster">
       <button id="play2" type="button">▶ Start the story</button><button id="play" type="button" hidden>Watch</button>
       <div class="t">There's Someone in the Box</div>
-      <div class="s">A picture book about a text that wasn't what it said · about 3 min · sound on</div>
+      <div class="s">A text-message story about a text that wasn't what it said · about 3 min · sound on</div>
     </div>
     <div class="words" id="words" aria-live="polite"></div>
+    <div class="say" id="say" aria-live="polite"></div>
+    <div class="chips" id="chips"></div>
     <div class="bar">
       <button class="btn" id="back" type="button" aria-label="Back one page">⏮</button>
       <button class="btn main" id="pause" type="button" aria-label="Pause">❚❚</button>
@@ -120,7 +120,7 @@ select.btn{padding:0 10px}
       <button class="btn" id="snd" type="button" aria-label="Sound on">🔊</button>
     </div>
   </main>
-  <p class="note">A true story, told like a picture book. You choose what to say. No sound? Check the silent switch.</p>
+  <p class="note">A true story, told as a text thread. You choose what to say. No sound? Check the silent switch.</p>
 </div>
 
 <script type="module" src="./book/film.js"></script>

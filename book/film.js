@@ -337,29 +337,37 @@ const MOVES = [
   ['I\'ve been in a coma since 2019. What year is it?', 'its 2026. you can still do the job, just register first', 3, -1, 'He has to type. Even a coma doesn\'t stop the script.'],
   ['Tell a grown-up and block him', null, 0, 0, 'The best move of all.'],
 ];
+const chips = () => $('chips');
+function post(html) { words.insertAdjacentHTML('beforeend', html); reveal(); }
+function reveal() {
+  const fresh = [...words.querySelectorAll('.line:not(.on)')];
+  fresh.forEach((el, i) => setTimeout(() => { el.classList.add('on'); words.scrollTop = words.scrollHeight; }, 380 * i));
+  requestAnimationFrame(() => { words.scrollTop = words.scrollHeight; });
+}
+const you = (t, tag) => `<p class="line chat you pred"><b class="who">YOU · YOUR PICK</b>${tag ? `<span class="trick">${tag}</span><br>` : ''}${esc(t)}</p>`;
+const guess = (t) => `<p class="line chat charlie pred"><b class="who">CHARLIE · PREDICTED</b>${esc(t)}</p>`;
 function counterGame(done) {
   setPlaying(false);
   let typed = 0, patience = 4, round = 0;
   const say = $('say');
-  const meters = () => `<p class="line ts on">ROUND ${round + 1}/5 · HIS TYPING WASTED: ${typed * 20}s · HIS PATIENCE: ${'●'.repeat(Math.max(0, patience))}${'○'.repeat(Math.max(0, 4 - patience))}</p>`;
+  const meters = () => `<span class="meter">ROUND ${round + 1}/5 · HIS TYPING WASTED: ${typed * 20}s · HIS PATIENCE: ${'●'.repeat(Math.max(0, patience))}${'○'.repeat(Math.max(0, 4 - patience))}</span>`;
   const finish = (msg) => { say.innerHTML = `<p>${esc(msg)}</p>`; say.classList.add('on');
-    words.innerHTML = `${meters()}<p class="line cap on">You made Charlie type for ${typed * 20} seconds.</p>`;
-    const go = document.createElement('button'); go.className = 'btn'; go.textContent = 'Continue ▶'; go.onclick = () => done(); words.appendChild(go); };
+    post(`<p class="line mags">You made Charlie type for ${typed * 20} seconds.</p>`);
+    chips().innerHTML = meters();
+    const go = document.createElement('button'); go.className = 'btn'; go.textContent = 'Continue ▶'; go.onclick = () => { chips().innerHTML = ''; say.classList.remove('on'); done(); }; chips().appendChild(go); };
   const turn = () => {
     if (round >= 5) return finish('Five turns! You kept Charlie busy and gave him nothing at all.');
     const pool = MOVES.slice(0, -1).sort(() => Math.random() - 0.5).slice(0, 3).concat([MOVES[MOVES.length - 1]]);
     say.innerHTML = `<p>${round ? 'Again. What now?' : 'Can you keep Charlie busy without giving him anything?'}</p>`; say.classList.add('on');
-    words.innerHTML = meters();
-    const box = document.createElement('div'); box.className = 'bar';
+    chips().innerHTML = meters(); const box = chips();
     pool.forEach(([label, reply, cost, pat, note]) => { const bt = document.createElement('button'); bt.className = 'btn'; bt.type = 'button'; bt.textContent = label;
       bt.onclick = () => {
         if (!reply) { fx('right'); return finish('You told a grown-up and blocked him. That\'s how you really win.'); }
         typed += cost; patience = Math.min(4, patience + pat); round++; fx(pat < 0 ? 'wrong' : 'click');
-        words.innerHTML = `${meters()}<p class="line chat you on"><b class="who">YOU</b><br>${esc(label)}</p><p class="line chat charlie pred on"><b class="who">CHARLIE · PREDICTED</b><br>${esc(reply)}</p>`;
+        chips().innerHTML = meters(); post(you(label) + guess(reply));
         say.innerHTML = `<p>${esc(note)}</p>`;
         setTimeout(() => { if (patience <= 0) finish('Charlie went quiet. You pushed too hard, so he went to bother someone else.'); else turn(); }, 2600);
       }; box.appendChild(bt); });
-    words.appendChild(box);
   };
   turn();
 }
@@ -372,30 +380,29 @@ const flat = []; T.forEach((p, i) => p.beats.forEach((b, j) => flat.push({ pi: i
 const wordsOf = (b) => b.lines.reduce((a, [, t]) => a + t.split(/\s+/).length, 0);
 const holdFor = (b) => b.hold ?? (b.hush ? b.hush : b.lines.length ? Math.max(1.6, 0.6 + wordsOf(b) / speed + 0.3) + (b.refrain ? 0.71 : 0) : 1.2);
 function ask(b) {
-  const box = document.createElement('div'); box.className = 'bar'; box.setAttribute('role', 'group');
+  const box = chips(); box.innerHTML = ''; box.setAttribute('role', 'group');
   b.ask.opts.forEach(([label, val]) => { const bt = document.createElement('button'); bt.className = 'btn'; bt.type = 'button'; bt.textContent = label;
-    bt.onclick = () => { st[b.ask.key] = val; fx('click'); $('say').innerHTML = '<p>Locked in. Keep watching.</p>'; $('say').classList.add('on'); box.remove(); setTimeout(() => { setPlaying(true); }, 700); }; box.appendChild(bt); });
-  words.appendChild(box); setPlaying(false);
+    bt.onclick = () => { st[b.ask.key] = val; fx('click'); $('say').innerHTML = '<p>Locked in. Keep watching.</p>'; $('say').classList.add('on'); box.innerHTML = ''; post(you(label, 'YOUR GUESS')); setTimeout(() => { setPlaying(true); }, 700); }; box.appendChild(bt); });
+  setPlaying(false);
 }
 function pick(b) {
-  const box = document.createElement('div'); box.className = 'bar'; box.setAttribute('role', 'group');
+  const box = chips(); box.innerHTML = ''; box.setAttribute('role', 'group');
   b.pick.forEach(([label, pred]) => { const bt = document.createElement('button'); bt.className = 'btn'; bt.type = 'button'; bt.textContent = label;
-    bt.onclick = () => { box.remove(); fx('click'); const say = $('say');
+    bt.onclick = () => { box.innerHTML = ''; fx('click'); const say = $('say');
       if (!pred) { say.innerHTML = '<p>That\'s what you really sent.</p>'; say.classList.add('on'); setTimeout(() => setPlaying(true), 900); return; }
-      words.innerHTML = `<p class="line chat charlie pred on"><b class="who">CHARLIE · PREDICTED</b><br>${esc(pred[0])}</p>`;
+      post(you(label) + guess(pred[0]));
       say.innerHTML = `<p>${esc(pred[1])} You really sent something else:</p>`; say.classList.add('on');
       setTimeout(() => setPlaying(true), 4200); }; box.appendChild(bt); });
-  words.appendChild(box); setPlaying(false);
+  setPlaying(false);
 }
 function show(b, page) {
   if (b.dyn) b = { ...b, lines: b.dyn(st) };
   if (false) { const good = (st.who === 'person') + (st.worker === 'report') + (st.coins === 'walk'); b = { ...b, art: ['end', { ...b.art[1], peel: Math.min(5, b.art[1].peel - 1 + good), who: st.who, worker: st.worker, coins: st.coins }] }; }
   const [scene, props] = b.art;
   art.innerHTML = S[scene](props || {});
-  const say = $('say'), ml = b.lines.filter(([k]) => k === 'm');
-  say.innerHTML = ml.map(([, t]) => `<p>${esc(t)}</p>`).join(''); say.classList.toggle('on', ml.length > 0);
-  words.innerHTML = b.lines.filter(([k]) => k !== 'm').map(([k, t]) => k === 'q' ? realLine(t) : k === 'y' ? `<p class="line chat you pred"><b class="who">YOU · STORY MOVE</b><span class="trick">SAD STORY</span><br>${esc(t)}</p>` : k === 'x' ? `<p class="line chat charlie pred"><b class="who">CHARLIE · PREDICTED</b><span class="trick">BACK TO SCRIPT</span><br>${esc(t)}</p>` : k === 'r' ? `<p class="line chat charlie"><b class="who">CHARLIE'S SCRIPT</b><span class="trick">BLAME YOU</span><br>${esc(t)}<br><small>(from a seized scam manual, another case)</small></p>` : `<p class="line ${({ v: '', m: 'mags', c: 'cap', q: 'chat', k: 'kid', r: 'chat other', t: 'ts' })[k]}">${esc(t).replace(/⟨(.+?)⟩/g, (_, w) => b.refrain ? `<span class="hide" data-w="${w}">${w}</span>` : w)}</p>`).join('');
-  requestAnimationFrame(() => words.querySelectorAll('.line').forEach((el, i) => setTimeout(() => el.classList.add('on'), 250 * i)));
+  $('say').classList.remove('on'); chips().innerHTML = '';
+  const shot = scene === 'shot' ? `<div class="line img"><span>CHARLIE SENT A PICTURE · REAL SCREENSHOT</span><img src="./book/signup.jpg" alt="The sign-up screenshot the scammer sent, with red arrows to Sign Up and the referral code"></div>` : '';
+  post(b.lines.map(([k, t]) => k === 'q' ? realLine(t) : k === 'y' ? `<p class="line chat you pred"><b class="who">YOU · STORY MOVE</b><span class="trick">SAD STORY</span><br>${esc(t)}</p>` : k === 'x' ? `<p class="line chat charlie pred"><b class="who">CHARLIE · PREDICTED</b><span class="trick">BACK TO SCRIPT</span><br>${esc(t)}</p>` : (k === 'v' && shot && t.startsWith('He even sent')) ? `<p class="line v">${esc(t)}</p>` + shot : k === 'r' ? `<p class="line chat charlie"><b class="who">CHARLIE'S SCRIPT</b><span class="trick">BLAME YOU</span><br>${esc(t)}<br><small>(from a seized scam manual, another case)</small></p>` : `<p class="line ${({ v: 'v', m: 'mags', c: 'cap', q: 'chat', k: 'kid', r: 'chat other', t: 'ts' })[k]}">${esc(t).replace(/⟨(.+?)⟩/g, (_, w) => b.refrain ? `<span class="hide" data-w="${w}">${w}</span>` : w)}</p>`).join(''));
   if (b.refrain) { const h = words.querySelector('.hide'); if (h) setTimeout(() => { h.classList.remove('hide'); fx('stinger'); }, Math.max(400, (holdFor(b) - 0.71) * 1000 * 0.55)); }
   setMusic(b.hush ? {} : { ...page.mus, ...(b.mus || {}) });
   if (b.fx) fx(b.fx);
@@ -421,7 +428,7 @@ function setPlaying(p) {
   if (!p && playing) { playing = false; clearTimeout(timer); remaining -= performance.now() - beatStart; }
   $('pause').textContent = playing ? '❚❚' : '▶'; $('pause').setAttribute('aria-label', playing ? 'Pause' : 'Play');
 }
-function jump(dir) { const np = Math.max(0, Math.min(T.length - 1, pi + dir)); pi = np; bi = 0; while (!vis(T[pi].beats[bi])) bi++; step(); }
+function jump(dir) { words.innerHTML = ''; const np = Math.max(0, Math.min(T.length - 1, pi + dir)); pi = np; bi = 0; while (!vis(T[pi].beats[bi])) bi++; step(); }
 
 /* ============================== wiring ============================== */
 art.innerHTML = S.poster();
@@ -434,13 +441,13 @@ $('play2').addEventListener('click', () => { interactive = true; $('play').click
 $('play').addEventListener('click', () => {
   if (!interactive) Object.assign(st, { who: 'person' });
   audioStart(); $('splash').hidden = true;               // created inside the tap; never awaited before the picture moves
-  $('poster').hidden = true; playing = true; pi = 0; bi = 0; step(); setPlaying(true);
+  $('poster').hidden = true; words.innerHTML = ''; playing = true; pi = 0; bi = 0; step(); setPlaying(true);
 });
-$('pause').addEventListener('click', () => { if (!playing && pi === T.length - 1 && bi === T[pi].beats.length - 1) { pi = 0; bi = 0; playing = true; step(); setPlaying(true); return; } setPlaying(!playing); });
+$('pause').addEventListener('click', () => { if (!playing && pi === T.length - 1 && bi === T[pi].beats.length - 1) { words.innerHTML = ''; pi = 0; bi = 0; playing = true; step(); setPlaying(true); return; } setPlaying(!playing); });
 $('back').addEventListener('click', () => { if (!$('poster').hidden) return; jump(bi > 0 ? 0 : -1); });
 $('next').addEventListener('click', () => { if (!$('poster').hidden) return; jump(1); });
 $('speed').addEventListener('change', (e) => { speed = parseFloat(e.target.value); try { localStorage.setItem('stsb.v1.textSpeed', String(speed)); } catch (er) {} });
 try { const s = parseFloat(localStorage.getItem('stsb.v1.textSpeed')); if (s) { speed = s; $('speed').value = String(s); } } catch (e) {}
 $('snd').addEventListener('click', () => { soundOn = !soundOn; $('snd').textContent = soundOn ? '🔊' : '🔇'; $('snd').setAttribute('aria-label', soundOn ? 'Sound on' : 'Sound off'); applyMute(); });
 window.addEventListener('keydown', (e) => { if (e.code === 'Space' && $('poster').hidden) { e.preventDefault(); setPlaying(!playing); } });
-art.addEventListener('click', () => { if ($('poster').hidden) setPlaying(!playing); });
+
