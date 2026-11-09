@@ -338,6 +338,8 @@ const MOVES = [
   ['Tell a grown-up and block him', null, 0, 0, 'The best move of all.'],
 ];
 const chips = () => $('chips');
+const toBottom = () => { words.scrollTop = words.scrollHeight; };
+try { new ResizeObserver(toBottom).observe(words); new MutationObserver(() => requestAnimationFrame(toBottom)).observe($('chips'), { childList: true, subtree: true }); new MutationObserver(() => requestAnimationFrame(toBottom)).observe($('say'), { childList: true, attributes: true }); } catch (e) {}
 function post(html) { words.insertAdjacentHTML('beforeend', html); reveal(); }
 function reveal() {
   const fresh = [...words.querySelectorAll('.line:not(.on)')];
