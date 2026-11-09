@@ -213,8 +213,11 @@ const T = [
     { art: ['phone', { mood: 'up' }], lines: [['m', 'Three hours of silence. Now?']], pick: [['I am ready to start the training', null], ['Block and report', ['(nothing; the number is blocked)', 'Best move. Forward it to 7726.']], ['Sorry, my cat ate my phone', ['Hi, are you still interested in remote work?', 'Any reply keeps you on the list.']]] },
     { art: ['phone', {}], lines: [['t', 'Sun 3:04 pm'], ['q', 'I am ready to start the training when you are']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['t', '6 minutes later'], ['q', 'When you register, you\'ll need to enter my referral code: O6V7OH']] },
+    { art: ['phone', { buzz: true }], fx: 'blip', lines: [['q', 'If you run into any issues during registration, just take a screenshot and send it to me.']] },
     { art: ['shot', {}], lines: [['c', 'His how-to: Sign Up, then the referral code box. The code tells his boss who brought you in.']], hold: 5 },
-    { art: ['phone', { buzz: true }], fx: 'blip', lines: [['q', 'If you run into any issues during registration, just take a screenshot and send it to me.']] }] },
+    { art: ['phone', { mood: 'squint' }], lines: [['m', 'Seven hours later. Your move.']], pick: [['When can I expect to receive the $300', null], ['Done! What\'s the next task?', ['Great. Let me know when you\'re ready to start the training.', 'Eager gets a warm, fast reply.']], ['Block and report', ['(nothing; the number is blocked)', 'The move that ends it. Forward to 7726.']], ['My hamster signed up instead', ['send me a screenshot', 'Weird gets a demand for proof.']]] },
+    { art: ['phone', {}], lines: [['t', 'Mon 2:32 am'], ['q', 'When can I expect to receive the $300']] },
+    { art: ['silence', {}], lines: [['t', 'No reply yet.']], hush: 2 }] },
   { page: 7, mus: { pad: .3 }, beats: [
     { art: ['box', { open: 0 }], lines: [['c', 'Polished pasted blocks. Lowercase lines typed fast. A heart tapped on your message.']] },
     { art: ['box', { open: 1 }], fx: 'creak', lines: [['c', 'A person, working from a script.']] },
@@ -299,7 +302,7 @@ const YOU_TRICKS = [
   ['Yes', 'PLAY ALONG'], ['How do I get the merchants', 'MAKE HIM EXPLAIN'], ['That sounds like something I can do', 'ACT EAGER'],
   ['Yes please, and method of payment', 'THE MONEY QUESTION'], ['How am I compensated', 'ASK AGAIN'], ["What's the next step", 'PLAY ALONG'],
   ["I'm owed $300", 'BLUFF'], ['In a different session', 'FAKE MEMORY'], ['Show me an example', 'MAKE HIM PROVE IT'],
-  ['How do I start training', 'ACT EAGER'], ['I am ready to start the training', 'ACT EAGER']];
+  ['How do I start training', 'ACT EAGER'], ['I am ready to start the training', 'ACT EAGER'], ['When can I expect to receive the $300', 'BLUFF AGAIN']];
 const CHARLIE_TRICKS = [
   ['Olivia from MASIS STAFFING', 'BORROWED NAME'], ["haven't heard back from you at all", 'KEEP POKING'], ['side gig I\'m doing myself', 'ONE OF US'],
   ['All our work is done through', 'VAGUE ANSWER'], ['sure, its easy', 'TYPED LIVE'], ['$2800', 'BIG NUMBER'],
