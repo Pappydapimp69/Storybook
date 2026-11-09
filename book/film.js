@@ -217,7 +217,8 @@ const T = [
     { art: ['shot', {}], lines: [['c', 'His how-to: Sign Up, then the referral code box. The code tells his boss who brought you in.']], hold: 5 },
     { art: ['phone', { mood: 'squint' }], lines: [['m', 'Seven hours later. Your move.']], pick: [['When can I expect to receive the $300', null], ['Done! What\'s the next task?', ['Great. Let me know when you\'re ready to start the training.', 'Eager gets a warm, fast reply.']], ['Block and report', ['(nothing; the number is blocked)', 'The move that ends it. Forward to 7726.']], ['My hamster signed up instead', ['send me a screenshot', 'Weird gets a demand for proof.']]] },
     { art: ['phone', {}], lines: [['t', 'Mon 2:32 am'], ['q', 'When can I expect to receive the $300']] },
-    { art: ['silence', {}], lines: [['t', 'No reply yet.']], hush: 2 }] },
+    { art: ['silence', {}], lines: [['t', 'No reply yet.']], hush: 2 },
+    { art: ['phone', { mood: 'squint' }], lines: [['c', 'Your turn to play him.']], game: true }] },
   { page: 7, mus: { pad: .3 }, beats: [
     { art: ['box', { open: 0 }], lines: [['c', 'Polished pasted blocks. Lowercase lines typed fast. A heart tapped on your message.']] },
     { art: ['box', { open: 1 }], fx: 'creak', lines: [['c', 'A person, working from a script.']] },
@@ -315,6 +316,49 @@ function realLine(t) {
   return `<p class="line chat ${who}"><b class="who">${who === 'you' ? 'YOU' : 'CHARLIE'}</b>${trick ? `<span class="trick">${trick}</span>` : ''}<br>${esc(t)}</p>`;
 }
 
+
+/* ============================== the counter game ============================== */
+// After the screenshot: out-play Charlie. Typed replies cost him time; pasted ones cost nothing.
+// Claims about his records or bot tests burn his patience; at zero he drops you.
+const MOVES = [
+  ['The verification text never came', 'send me a screenshot', 3, 0, 'Fails before an account exists. He has to type.'],
+  ['Is the code O6V7OH with zeros or the letter O?', 'letter O. try again', 3, 0, 'A real question his script has no card for.'],
+  ['Is this W-2 or 1099?', 'no need to worry about that, register first', 2, -1, 'Tax questions get brushed off.'],
+  ['Which app pays me? Zelle?', 'You\'ll see after the training.', 1, 0, 'The money question gets a pasted dodge.'],
+  ['huh, which part?', 'just click sign up and enter my code', 2, 0, 'Confusion makes him rephrase by hand.'],
+  ['The birth year box won\'t take my year', 'put any year', 3, -1, 'He types, a little annoyed.'],
+  ['Where\'s my $300?', 'we havent even started , which work are you referring to?', 2, -2, 'Claims about his records burn his patience.'],
+  ['beep boop are you a bot', 'send me a screenshot', 1, -2, 'Bot tests look like baiting.'],
+  ['ok signing up now!', 'great, let me know when you are done', 1, 1, 'Eager buys patience back.'],
+  ['Block and report it', null, 0, 0, 'Ends it. Forward to 7726.'],
+];
+function counterGame(done) {
+  setPlaying(false);
+  let typed = 0, patience = 4, round = 0;
+  const say = $('say');
+  const meters = () => `<p class="line ts on">ROUND ${round + 1}/5 · HIS TYPING WASTED: ${typed * 20}s · HIS PATIENCE: ${'●'.repeat(Math.max(0, patience))}${'○'.repeat(Math.max(0, 4 - patience))}</p>`;
+  const finish = (msg) => { say.innerHTML = `<p>${esc(msg)}</p>`; say.classList.add('on');
+    words.innerHTML = `${meters()}<p class="line cap on">Score: ${typed * 20} seconds of a scammer's typing.</p>`;
+    const go = document.createElement('button'); go.className = 'btn'; go.textContent = 'Continue ▶'; go.onclick = () => done(); words.appendChild(go); };
+  const turn = () => {
+    if (round >= 5) return finish('Five rounds. You cost him real typing and never sent a thing that mattered.');
+    const pool = MOVES.slice(0, 9).sort(() => Math.random() - 0.5).slice(0, 3).concat([MOVES[9]]);
+    say.innerHTML = `<p>${round ? 'Again. What now?' : 'He wants you signed up. Counter him.'}</p>`; say.classList.add('on');
+    words.innerHTML = meters();
+    const box = document.createElement('div'); box.className = 'bar';
+    pool.forEach(([label, reply, cost, pat, note]) => { const bt = document.createElement('button'); bt.className = 'btn'; bt.type = 'button'; bt.textContent = label;
+      bt.onclick = () => {
+        if (!reply) { fx('right'); return finish('Blocked and reported. That\'s the move that actually hurts them.'); }
+        typed += cost; patience = Math.min(4, patience + pat); round++; fx(pat < 0 ? 'wrong' : 'click');
+        words.innerHTML = `${meters()}<p class="line chat you on"><b class="who">YOU</b><br>${esc(label)}</p><p class="line chat charlie pred on"><b class="who">CHARLIE · PREDICTED</b><br>${esc(reply)}</p>`;
+        say.innerHTML = `<p>${esc(note)}</p>`;
+        setTimeout(() => { if (patience <= 0) finish('He went quiet. You pushed too hard, so he dropped you for an easier lead.'); else turn(); }, 2600);
+      }; box.appendChild(bt); });
+    words.appendChild(box);
+  };
+  turn();
+}
+
 /* ============================== player ============================== */
 const st = { who: 'person' };   // Watch-it path: the cautionary choices
 const vis = (b) => !b.when || b.when(st);
@@ -352,6 +396,7 @@ function show(b, page) {
   if (b.fx) fx(b.fx);
   if (b.ask && interactive) setTimeout(() => ask(b), 400);
   if (b.pick && interactive) setTimeout(() => pick(b), 400);
+  if (b.game) setTimeout(() => counterGame(() => { setPlaying(true); }), 400);
   $('prog').style.width = `${(100 * flat.findIndex((f) => f.pi === pi && f.bj === bi)) / flat.length}%`;
 }
 function step() {
