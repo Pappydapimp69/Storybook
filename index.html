@@ -92,6 +92,12 @@ select.btn{padding:0 6px;font-size:.85rem}
 .poster .t{font:700 clamp(1.4rem,6vw,2rem) var(--serif)} .poster .s{font:500 .9rem var(--sans);color:var(--soft)}
 .note{font-size:.78rem;color:var(--soft);max-width:460px;text-align:center;margin:0}
 @keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
+.hud{position:relative;display:flex;justify-content:space-around;gap:6px;padding:6px 10px;background:var(--top);border-bottom:1px solid var(--hatch);font:600 .85rem var(--sans)}
+.hud b{font-weight:800}
+.hud .pop{position:absolute;left:50%;top:100%;transform:translateX(-50%);z-index:4;white-space:nowrap;font:800 .85rem var(--sans);font-style:normal;background:var(--ok);color:#fff;padding:3px 10px;border-radius:999px;pointer-events:none}
+.hud .pop.bad{background:var(--accent)}
+@media (prefers-reduced-motion:no-preference){.hud .pop{animation:popup 1.6s ease-out forwards}}
+@keyframes popup{0%{opacity:0;transform:translate(-50%,-4px)}15%{opacity:1;transform:translate(-50%,4px)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,10px)}}
 </style>
 </head>
 <body>
@@ -99,12 +105,13 @@ select.btn{padding:0 6px;font-size:.85rem}
 <div class="shell">
   <main class="book" aria-label="There's Someone in the Box, a picture-book film">
     <header class="top"><div class="av" aria-hidden="true">C</div><b>Charlie</b><small>+1 (804) 451-8249 · Text message</small></header>
+    <div class="hud" id="hud" aria-live="polite"><span>⏱ <b>0s</b> wasted</span><span>🛡 ●●●</span><span>⭐ <b>90</b></span></div>
     <div class="art" id="art"></div>
         <button class="splash" id="splash" type="button" aria-label="Tap to start with sound"><span class="sbig">There's Someone in the Box</span><span class="stap">Tap to start ♪</span></button>
     <div class="poster" id="poster">
-      <button id="play2" type="button">▶ Start the story</button><button id="play" type="button" hidden>Watch</button>
+      <button id="play2" type="button">▶ Play</button><button id="play" type="button" hidden>Watch</button>
       <div class="t">There's Someone in the Box</div>
-      <div class="s">A text-message story about a text that wasn't what it said · about 3 min · sound on</div>
+      <div class="s">Waste the scammer's time. Keep your 3 shields. Every yes costs one. · sound on</div>
     </div>
     <div class="words" id="words" aria-live="polite"></div>
     <div class="say" id="say" aria-live="polite"></div>
@@ -120,7 +127,7 @@ select.btn{padding:0 6px;font-size:.85rem}
       <button class="btn" id="snd" type="button" aria-label="Sound on">🔊</button>
     </div>
   </main>
-  <p class="note">A true story, told as a text thread. You choose what to say. No sound? Check the silent switch.</p>
+  <p class="note">A game made from a real scam text thread. You choose what to say. No sound? Check the silent switch.</p>
 </div>
 
 <script type="module" src="./book/film.js"></script>

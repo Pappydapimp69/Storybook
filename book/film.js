@@ -234,6 +234,7 @@ const T = [
     { when: (s) => s.who === 'person', art: ['unmask', { who: 'person' }], fx: 'right', lines: [['m', 'Person. Right.']] },
     { when: (s) => s.who === 'hamster', art: ['unmask', { who: 'bot' }], fx: 'wrong', lines: [['m', 'Hamster. Wrong. Closer than "bot", though.']] }] },
   { page: 8, mus: { theme: .3, pad: .3 }, beats: [
+    { art: ['end', { peel: 5 }], final: true, dyn: () => { const t = total(), [r, stars] = rank(t); return [['v', `GAME OVER · ${stars}`], ['v', `Your rank: ${r}`], ['t', `${G.waste}s of his time wasted · ${Math.max(0, G.shields)} shields left${G.bonus ? ` · +${G.bonus} bonus` : ''} · score ${t}`]]; }, hold: 4 },
     { art: ['end', { peel: 5 }], lines: [['c', 'Pick the first answer each time and you get the real thread (Nov 2026), word for word. Other picks branch into replies written from how he really answered. merchkitcloud.com was registered 11 days before the first text. MASIS Staffing and Merchkit are real companies; the scam borrowed their names.'], ['c', 'Report scam texts: forward to 7726 · reportfraud.ftc.gov · ic3.gov']] }] },
 ];
 
@@ -369,7 +370,7 @@ function counterGame(done) {
     pool.forEach(([label, reply, cost, pat, note]) => { const bt = document.createElement('button'); bt.className = 'btn'; bt.type = 'button'; bt.textContent = label;
       bt.onclick = () => {
         if (!reply) { fx('right'); return finish('You told a grown-up and blocked him. That\'s how you really win.'); }
-        typed += cost; patience = Math.min(4, patience + pat); round++; fx(pat < 0 ? 'wrong' : 'click');
+        typed += cost; G.waste += cost * 20; hud(`+${cost * 20}s`); patience = Math.min(4, patience + pat); round++; fx(pat < 0 ? 'wrong' : 'click');
         chips().innerHTML = meters(); post(you(label) + guess(reply));
         say.innerHTML = `<p>${esc(note)}</p>`;
         setTimeout(() => { if (patience <= 0) finish('Charlie went quiet. You pushed too hard, so he went to bother someone else.'); else turn(); }, 2600);
@@ -379,7 +380,30 @@ function counterGame(done) {
 }
 
 /* ============================== player ============================== */
-const st = { who: 'person' };   // Watch-it path: the cautionary choices
+const st = { who: 'person' };
+// Game scoring: seconds of Charlie's time you waste, shields you keep (each 'yes' moves him forward), bonuses.
+const SCORE = {
+  'Yes': [0, -1, 'You gave him a yes'], 'Who is Olivia?': [20, 0, 'He had to answer'], '(ignore it)': [5, 0, 'He had to nudge again'], 'new phone who dis': [20, 0, 'Script restarted'],
+  'How do I get the merchants?': [15, 0, 'He had to explain'], 'Is this a scam?': [10, 0, 'He pasted a defense'], 'Can I get paid in pizza?': [20, 0, 'He had to type'],
+  'Yes please, and method of payment': [10, -1, 'You said yes'], 'Which app pays me?': [15, 0, 'Money question'], 'Pay me in skates': [20, 0, 'He had to type'],
+  'Bluff: you owe me $300': [60, 0, 'He typed for minutes'], 'ok signing up now!': [0, -1, 'You moved him forward'], 'Stop texting me': [5, 0, 'One more nudge'], 'beep boop I am also a bot': [20, 0, 'He had to type'],
+  'I am ready to start the training': [0, -1, 'You moved him forward'], 'Block and report': [0, 0, 'Blocked!', 100], 'Sorry, my cat ate my phone': [15, 0, 'He had to type'],
+  'When can I expect to receive the $300': [30, 0, 'Bluff again'], 'Done! What\'s the next task?': [0, -1, 'You moved him forward'], 'My hamster signed up instead': [20, 0, 'He had to type'],
+};
+const G = { waste: 0, shields: 3, bonus: 0 };
+function hud(flash) {
+  const h = $('hud'); if (!h) return;
+  h.innerHTML = `<span>⏱ <b>${G.waste}s</b> wasted</span><span>🛡 ${'●'.repeat(Math.max(0, G.shields))}${'○'.repeat(Math.max(0, 3 - G.shields))}</span><span>⭐ <b>${total()}</b></span>`;
+  if (flash) { const f = document.createElement('i'); f.className = 'pop' + (flash.startsWith('−') ? ' bad' : ''); f.textContent = flash; h.appendChild(f); setTimeout(() => f.remove(), 1600); }
+}
+const total = () => G.waste + G.bonus + Math.max(0, G.shields) * 30;
+function score(label) {
+  const sc = SCORE[label]; if (!sc) return;
+  const [secs, sh, why, bonus = 0] = sc; G.waste += secs; G.shields += sh; G.bonus += bonus;
+  hud(sh < 0 ? `−1 🛡 ${why}` : bonus ? `+${bonus} ${why}` : secs ? `+${secs}s ${why}` : '');
+}
+const rank = (t) => t >= 300 ? ['Scam Buster', '★★★'] : t >= 180 ? ['Detective', '★★☆'] : t >= 90 ? ['Rookie', '★☆☆'] : ['Easy Target', '☆☆☆'];
+function resetGame() { Object.assign(G, { waste: 0, shields: 3, bonus: 0 }); st.alt = null; st.blocked = false; hud(); }   // Watch-it path: the cautionary choices
 T.forEach((p) => p.beats.forEach((b) => { b.pg = p.page; }));
 const vis = (b) => (!b.when || b.when(st)) && !(st.blocked && b.pg < 7);
 let interactive = false, speed = 2.6, playing = false, pi = 0, bi = 0, timer = null, beatStart = 0, beatLen = 0, remaining = 0;
@@ -389,13 +413,13 @@ const holdFor = (b) => b.hold ?? (b.hush ? b.hush : b.lines.length ? Math.max(1.
 function ask(b) {
   const box = chips(); box.innerHTML = ''; box.setAttribute('role', 'group');
   b.ask.opts.forEach(([label, val]) => { const bt = document.createElement('button'); bt.className = 'btn'; bt.type = 'button'; bt.textContent = label;
-    bt.onclick = () => { st[b.ask.key] = val; fx('click');  box.innerHTML = ''; post(`<p class="line ts">You guessed: ${esc(label.toLowerCase())}</p>`); setTimeout(() => { setPlaying(true); }, 700); }; box.appendChild(bt); });
+    bt.onclick = () => { st[b.ask.key] = val; fx('click'); if (b.ask.key === 'who' && val === 'person') G.bonus += 50;  box.innerHTML = ''; post(`<p class="line ts">You guessed: ${esc(label.toLowerCase())}</p>`); setTimeout(() => { setPlaying(true); }, 700); }; box.appendChild(bt); });
   setPlaying(false);
 }
 function pick(b) {
   const box = chips(); box.innerHTML = ''; box.setAttribute('role', 'group');
   b.pick.forEach(([label, pred]) => { const bt = document.createElement('button'); bt.className = 'btn'; bt.type = 'button'; bt.textContent = label;
-    bt.onclick = () => { box.innerHTML = ''; fx('click'); st.alt = pred ? label : null;
+    bt.onclick = () => { box.innerHTML = ''; fx('click'); st.alt = pred ? label : null; score(label);
       if (!pred) { setTimeout(() => setPlaying(true), 400); return; }
       if (pred[0] === 'END') { st.blocked = true; post(you('(blocked this number · forwarded the text to 7726)') + `<p class="line v">${esc(pred[1])}</p>`); setTimeout(() => setPlaying(true), 2600); return; }
       post(you(label) + guess(pred[0]) + `<p class="line v">${esc(pred[1])}</p>`);
@@ -415,6 +439,7 @@ function show(b, page) {
   if (b.fx) fx(b.fx);
   if (b.ask && interactive) setTimeout(() => ask(b), 400);
   if (b.pick && interactive) setTimeout(() => pick(b), 400);
+  if (b.final) { fx(total() >= 180 ? 'right' : 'wrong'); }
   if (b.game) setTimeout(() => counterGame(() => { setPlaying(true); }), 400);
   $('prog').style.width = `${(100 * flat.findIndex((f) => f.pi === pi && f.bj === bi)) / flat.length}%`;
 }
@@ -427,7 +452,7 @@ function step() {
 function schedule() { clearTimeout(timer); if (playing) timer = setTimeout(advance, remaining); }
 function advance() {
   do { bi++; if (bi >= T[pi].beats.length) { pi++; bi = 0; } } while (pi < T.length && !vis(T[pi].beats[bi]));
-  if (pi >= T.length) { playing = false; pi = T.length - 1; bi = T[pi].beats.length - 1; $('pause').textContent = '↺'; $('pause').setAttribute('aria-label', 'Replay'); setMusic({ pad: 0.2 }); return; }
+  if (pi >= T.length) { playing = false; pi = T.length - 1; bi = T[pi].beats.length - 1; $('pause').textContent = '↺'; $('pause').setAttribute('aria-label', 'Replay'); setMusic({ pad: 0.2 }); const again = document.createElement('button'); again.className = 'btn'; again.type = 'button'; again.textContent = '↺ Play again'; again.onclick = () => { chips().innerHTML = ''; $('pause').click(); }; chips().innerHTML = ''; chips().appendChild(again); return; }
   step();
 }
 function setPlaying(p) {
@@ -448,9 +473,9 @@ $('play2').addEventListener('click', () => { interactive = true; $('play').click
 $('play').addEventListener('click', () => {
   if (!interactive) Object.assign(st, { who: 'person' });
   audioStart(); $('splash').hidden = true;               // created inside the tap; never awaited before the picture moves
-  $('poster').hidden = true; words.innerHTML = ''; st.alt = null; st.blocked = false; playing = true; pi = 0; bi = 0; step(); setPlaying(true);
+  $('poster').hidden = true; words.innerHTML = ''; resetGame(); playing = true; pi = 0; bi = 0; step(); setPlaying(true);
 });
-$('pause').addEventListener('click', () => { if (!playing && pi === T.length - 1 && bi === T[pi].beats.length - 1) { words.innerHTML = ''; st.alt = null; st.blocked = false; pi = 0; bi = 0; playing = true; step(); setPlaying(true); return; } setPlaying(!playing); });
+$('pause').addEventListener('click', () => { if (!playing && pi === T.length - 1 && bi === T[pi].beats.length - 1) { words.innerHTML = ''; resetGame(); pi = 0; bi = 0; playing = true; step(); setPlaying(true); return; } setPlaying(!playing); });
 $('back').addEventListener('click', () => { if (!$('poster').hidden) return; jump(bi > 0 ? 0 : -1); });
 $('next').addEventListener('click', () => { if (!$('poster').hidden) return; jump(1); });
 $('speed').addEventListener('change', (e) => { speed = parseFloat(e.target.value); try { localStorage.setItem('stsb.v1.textSpeed', String(speed)); } catch (er) {} });
