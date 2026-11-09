@@ -182,17 +182,17 @@ const T = [
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['v', 'Nobody answered. So Charlie knocked again. And again.'], ['t', 'Thu 8:32 am · Fri 10:10 am'], ['q', 'Hi, I haven\'t heard back from you at all since the beginning, so I\'d like to confirm whether you\'re still interested in remote work.']] },
     { art: ['cups', {}], lines: [['v', 'On Saturday morning, it was time to answer.'], ['v', 'Who was really on the other end? Make your guess.']], ask: { key: 'who', opts: [['A bot', 'bot'], ['A recruiter', 'rec'], ['A person', 'person'], ['A very fast hamster', 'hamster']] } }] },
   { page: 2, mus: { machine: .3, pad: .2 }, beats: [
-    { art: ['phone', { mood: 'up' }], lines: [['m', 'Your reply?']], pick: [['Yes', null], ['Who is Olivia?', ['Olivia from our staffing team passed your number along. Are you still interested in this opportunity?', 'A pasted answer that dodges the question.']], ['(ignore it)', ['Hi, I haven\'t heard back from you, so I\'d like to confirm whether you\'re still interested in remote work.', 'One nudge a day, mid-morning.']], ['new phone who dis', ['Hi, I\'m Charlie. Are you still interested in remote work?', 'The script just restarts.']]] },
+    { art: ['phone', { mood: 'up' }], lines: [['m', 'What do you text back?']], pick: [['Yes', null], ['Who is Olivia?', ['Olivia from our staffing team passed your number along. Are you still interested in this opportunity?', 'A pasted answer that dodges the question.']], ['(ignore it)', ['Hi, I haven\'t heard back from you, so I\'d like to confirm whether you\'re still interested in remote work.', 'One nudge a day, mid-morning.']], ['new phone who dis', ['Hi, I\'m Charlie. Are you still interested in remote work?', 'The script just restarts.']]] },
     { art: ['phone', {}], lines: [['t', 'Sat 8:30 am'], ['q', 'Yes']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['v', 'Charlie was very friendly. He said the job was just his little side job.'], ['t', '8:33 am'], ['q', 'This job is actually more of a part time role, and it\'s a side gig I\'m doing myself']] },
     { art: ['stack', { n: 3, clock: '19 s · 9 s' }], fx: 'thunk', lines: [['v', 'You wanted to know how the job really worked.'], ['v', 'Then three long messages landed, faster than anyone can type.'], ['t', '8:51 am · three long messages in 28 seconds'], ['q', 'Company Name: Merchkit']] }] },
   { page: 3, mus: { theme: .4, pad: .3 }, beats: [
-    { art: ['phone', { mood: 'up' }], lines: [['m', 'Ask him something.']], pick: [['How do I get the merchants?', null], ['Is this a scam?', ['Our company is a legitimate e-commerce platform. Many people work with us every day.', 'A smooth answer was written before you asked.']], ['Can I get paid in pizza?', ['It\'s daily paid, I\'ll guide you on how to withdraw.', 'Off-script questions get the nearest card.']]] },
+    { art: ['phone', { mood: 'up' }], lines: [['m', 'What do you ask him?']], pick: [['How do I get the merchants?', null], ['Is this a scam?', ['Our company is a legitimate e-commerce platform. Many people work with us every day.', 'A smooth answer was written before you asked.']], ['Can I get paid in pizza?', ['It\'s daily paid, I\'ll guide you on how to withdraw.', 'Off-script questions get the nearest card.']]] },
     { art: ['phone', {}], lines: [['t', '3:17 pm'], ['q', 'How do I get the merchants and their product info']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['q', 'All our work is done through the company\'s work hub. There are thousands of products waiting to be optimized every day.']] },
     { art: ['phone', {}], lines: [['v', 'You played along. Charlie liked that.'], ['t', '3:51 pm'], ['q', 'That sounds like something I can do'], ['c', 'Charlie tapped ❤️ on your message.']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['v', 'Charlie promised lots of money. You asked how you would get paid.'], ['q', 'sure, its easy and flexible, can i now share with you our working hours and the pay?']] },
-    { art: ['phone', { mood: 'up' }], lines: [['m', 'He offers the pay. You say?']], pick: [['Yes please, and method of payment', null], ['Which app pays me?', ['You\'ll see after the training. No need to worry.', 'The money question gets dodged.']], ['Pay me in skates', ['The monthly base pay is $2800, plus separate product based profits.', 'He pastes the pay card anyway.']]] },
+    { art: ['phone', { mood: 'up' }], lines: [['m', 'He offers the pay. What do you text back?']], pick: [['Yes please, and method of payment', null], ['Which app pays me?', ['You\'ll see after the training. No need to worry.', 'The money question gets dodged.']], ['Pay me in skates', ['The monthly base pay is $2800, plus separate product based profits.', 'He pastes the pay card anyway.']]] },
     { art: ['phone', {}], lines: [['q', 'Yes please, and method of payment']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['v', 'Charlie talked about the money. He never said how.'], ['q', 'The monthly base pay is $2800, plus separate product based profits.'], ['c', 'The payment question was skipped.']] }] },
   { page: 4, mus: { pad: .3, arp: .3 }, beats: [
@@ -201,7 +201,7 @@ const T = [
     { art: ['phone', {}], lines: [['v', 'So you tried a trick of your own.'], ['t', '11:45 am'], ['q', 'What\'s the next step']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['v', 'Time for a bluff.'], ['q', 'Next, I\'ll show you how to register your work account on the company\'s Workhub.']] }] },
   { page: 5, mus: { pad: .3, arp: .4 }, beats: [
-    { art: ['phone', { mood: 'squint' }], lines: [['m', 'Your move.']], pick: [['Bluff: you owe me $300', null], ['ok signing up now!', ['great, let me know when you are done', 'Eager gets a fast, warm reply.']], ['Stop texting me', ['Hi, have you completed your registration?', 'One more nudge tomorrow, then quiet.']], ['beep boop I am also a bot', ['send me a screenshot', 'Weird gets a demand for proof.']]] },
+    { art: ['phone', { mood: 'squint' }], lines: [['m', 'What do you text back?']], pick: [['Bluff: you owe me $300', null], ['ok signing up now!', ['great, let me know when you are done', 'Eager gets a fast, warm reply.']], ['Stop texting me', ['Hi, have you completed your registration?', 'One more nudge tomorrow, then quiet.']], ['beep boop I am also a bot', ['send me a screenshot', 'Weird gets a demand for proof.']]] },
     { art: ['phone', { mood: 'squint' }], lines: [['t', '11:46:49'], ['q', 'I have already completed my work for the day though and I\'m owed $300. Please provide me withdrawal instructions']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['t', '8 seconds later'], ['q', 'After you finish the training, you can start using your work account to work and earn money. Are you available to start the training now?']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['v', 'This time the words came out messy and lowercase. Somebody real was typing.'], ['t', '34 seconds later'], ['q', 'we havent even started , which work are you referring to?']] },
@@ -210,12 +210,12 @@ const T = [
     { art: ['phone', {}], lines: [['q', 'Show me an example of what that would look like'], ['q', 'How do I start training?']] },
     { art: ['silence', {}], lines: [['v', 'When you said you were ready, Charlie came right back, like nothing happened.'], ['v', 'Then, for three whole hours, nothing at all.'], ['t', '3 hours 18 minutes of nothing']], hush: 2.5 }] },
   { page: 6, mus: { theme: .4, pad: .3 }, beats: [
-    { art: ['phone', { mood: 'up' }], lines: [['m', 'Three hours of silence. Now?']], pick: [['I am ready to start the training', null], ['Block and report', ['(nothing; the number is blocked)', 'Best move. Forward it to 7726.']], ['Sorry, my cat ate my phone', ['Hi, are you still interested in remote work?', 'Any reply keeps you on the list.']]] },
+    { art: ['phone', { mood: 'up' }], lines: [['m', 'Three hours of silence. What do you text?']], pick: [['I am ready to start the training', null], ['Block and report', ['(nothing; the number is blocked)', 'Best move. Forward it to 7726.']], ['Sorry, my cat ate my phone', ['Hi, are you still interested in remote work?', 'Any reply keeps you on the list.']]] },
     { art: ['phone', {}], lines: [['t', 'Sun 3:04 pm'], ['q', 'I am ready to start the training when you are']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['v', 'He gave you a secret code, so his boss would know who brought you in.'], ['t', '6 minutes later'], ['q', 'When you register, you\'ll need to enter my referral code: O6V7OH']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['q', 'If you run into any issues during registration, just take a screenshot and send it to me.']] },
     { art: ['shot', {}], lines: [['v', 'In the middle of the night, you asked about your three hundred dollars.'], ['v', 'He even sent pictures with red arrows, showing exactly where to sign up.'], ['c', 'His how-to: Sign Up, then the referral code box. The code tells his boss who brought you in.']], hold: 5 },
-    { art: ['phone', { mood: 'squint' }], lines: [['m', 'Seven hours later. Your move.']], pick: [['When can I expect to receive the $300', null], ['Done! What\'s the next task?', ['Great. Let me know when you\'re ready to start the training.', 'Eager gets a warm, fast reply.']], ['Block and report', ['(nothing; the number is blocked)', 'The move that ends it. Forward to 7726.']], ['My hamster signed up instead', ['send me a screenshot', 'Weird gets a demand for proof.']]] },
+    { art: ['phone', { mood: 'squint' }], lines: [['m', 'Seven hours later. What do you text?']], pick: [['When can I expect to receive the $300', null], ['Done! What\'s the next task?', ['Great. Let me know when you\'re ready to start the training.', 'Eager gets a warm, fast reply.']], ['Block and report', ['(nothing; the number is blocked)', 'The move that ends it. Forward to 7726.']], ['My hamster signed up instead', ['send me a screenshot', 'Weird gets a demand for proof.']]] },
     { art: ['phone', {}], lines: [['t', 'Mon 2:32 am'], ['q', 'When can I expect to receive the $300']] },
     { art: ['silence', {}], lines: [['t', 'No reply yet.']], hush: 2 },
     { art: ['phone', { mood: 'squint' }], fx: 'blip', lines: [['v', 'So you stalled. First, a sad story.'], ['y', 'Sorry, slow reply. My dog died.'], ['x', 'sorry to hear that. are you available to start the training now?'], ['m', 'One sad line. Then the script.']] },
@@ -316,7 +316,7 @@ const tagFor = (t, list) => (list.find(([k]) => t.includes(k)) || [])[1];
 function realLine(t) {
   const you = YOU_TRICKS.find(([k]) => t === k || (k.length > 4 && t.includes(k)));
   const who = you ? 'you' : 'charlie', trick = you ? you[1] : tagFor(t, CHARLIE_TRICKS);
-  return `<p class="line chat ${who}"><b class="who">${who === 'you' ? 'YOU' : 'CHARLIE'}</b>${trick ? `<span class="trick">${trick}</span>` : ''}<br>${esc(t)}</p>`;
+  return `<p class="line chat ${who}"><b class="who">${who === 'you' ? 'YOU' : 'CHARLIE'}</b>${trick ? `<span class="trick">${trick}</span>` : ''}${esc(t)}</p>`;
 }
 
 
@@ -346,7 +346,7 @@ function reveal() {
   fresh.forEach((el, i) => setTimeout(() => { el.classList.add('on'); words.scrollTop = words.scrollHeight; }, 180 * i));
   requestAnimationFrame(() => { words.scrollTop = words.scrollHeight; });
 }
-const you = (t, tag) => `<p class="line chat you pred"><b class="who">YOU · YOUR PICK</b>${tag ? `<span class="trick">${tag}</span><br>` : ''}${esc(t)}</p>`;
+const you = (t) => `<p class="line chat you pred"><b class="who">YOUR PICK</b>${esc(t)}</p>`;
 const guess = (t) => `<p class="line chat charlie pred"><b class="who">CHARLIE · PREDICTED</b>${esc(t)}</p>`;
 function counterGame(done) {
   setPlaying(false);
@@ -354,7 +354,7 @@ function counterGame(done) {
   const say = $('say');
   const meters = () => `<span class="meter">ROUND ${round + 1}/5 · HIS TYPING WASTED: ${typed * 20}s · HIS PATIENCE: ${'●'.repeat(Math.max(0, patience))}${'○'.repeat(Math.max(0, 4 - patience))}</span>`;
   const finish = (msg) => { say.innerHTML = `<p>${esc(msg)}</p>`; say.classList.add('on');
-    post(`<p class="line mags">You made Charlie type for ${typed * 20} seconds.</p>`);
+    post(`<p class="line v">You made Charlie type for ${typed * 20} seconds.</p>`);
     chips().innerHTML = meters();
     const go = document.createElement('button'); go.className = 'btn'; go.textContent = 'Continue ▶'; go.onclick = () => { chips().innerHTML = ''; say.classList.remove('on'); done(); }; chips().appendChild(go); };
   const turn = () => {
@@ -384,7 +384,7 @@ const holdFor = (b) => b.hold ?? (b.hush ? b.hush : b.lines.length ? Math.max(1.
 function ask(b) {
   const box = chips(); box.innerHTML = ''; box.setAttribute('role', 'group');
   b.ask.opts.forEach(([label, val]) => { const bt = document.createElement('button'); bt.className = 'btn'; bt.type = 'button'; bt.textContent = label;
-    bt.onclick = () => { st[b.ask.key] = val; fx('click'); $('say').innerHTML = '<p>Locked in. Keep watching.</p>'; $('say').classList.add('on'); box.innerHTML = ''; post(you(label, 'YOUR GUESS')); setTimeout(() => { setPlaying(true); }, 700); }; box.appendChild(bt); });
+    bt.onclick = () => { st[b.ask.key] = val; fx('click');  box.innerHTML = ''; post(`<p class="line ts">You guessed: ${esc(label.toLowerCase())}</p>`); setTimeout(() => { setPlaying(true); }, 700); }; box.appendChild(bt); });
   setPlaying(false);
 }
 function pick(b) {
@@ -404,7 +404,7 @@ function show(b, page) {
   art.innerHTML = S[scene](props || {});
   $('say').classList.remove('on'); chips().innerHTML = '';
   const shot = scene === 'shot' ? `<div class="line img"><span>CHARLIE SENT A PICTURE · REAL SCREENSHOT</span><img src="./book/signup.jpg" alt="The sign-up screenshot the scammer sent, with red arrows to Sign Up and the referral code"></div>` : '';
-  post(b.lines.map(([k, t]) => k === 'q' ? realLine(t) : k === 'y' ? `<p class="line chat you pred"><b class="who">YOU · STORY MOVE</b><span class="trick">SAD STORY</span><br>${esc(t)}</p>` : k === 'x' ? `<p class="line chat charlie pred"><b class="who">CHARLIE · PREDICTED</b><span class="trick">BACK TO SCRIPT</span><br>${esc(t)}</p>` : (k === 'v' && shot && t.startsWith('He even sent')) ? `<p class="line v">${esc(t)}</p>` + shot : k === 'r' ? `<p class="line chat charlie"><b class="who">CHARLIE'S SCRIPT</b><span class="trick">BLAME YOU</span><br>${esc(t)}<br><small>(from a seized scam manual, another case)</small></p>` : `<p class="line ${({ v: 'v', m: 'mags', c: 'cap', q: 'chat', k: 'kid', r: 'chat other', t: 'ts' })[k]}">${esc(t).replace(/⟨(.+?)⟩/g, (_, w) => b.refrain ? `<span class="hide" data-w="${w}">${w}</span>` : w)}</p>`).join(''));
+  post(b.lines.map(([k, t]) => k === 'q' ? realLine(t) : k === 'y' ? `<p class="line chat you pred"><b class="who">YOUR STALL</b>${esc(t)}</p>` : k === 'x' ? `<p class="line chat charlie pred"><b class="who">CHARLIE · PREDICTED</b>${esc(t)}</p>` : (k === 'v' && shot && t.startsWith('He even sent')) ? `<p class="line v">${esc(t)}</p>` + shot : k === 'r' ? `<p class="line chat charlie"><b class="who">CHARLIE'S SCRIPT</b><span class="trick">BLAME YOU</span>${esc(t)}<br><small>(from a seized scam manual, another case)</small></p>` : `<p class="line ${({ v: 'v', m: 'v', c: 'cap', q: 'chat', k: 'kid', r: 'chat other', t: 'ts' })[k]}">${esc(t).replace(/⟨(.+?)⟩/g, (_, w) => b.refrain ? `<span class="hide" data-w="${w}">${w}</span>` : w)}</p>`).join(''));
   if (b.refrain) { const h = words.querySelector('.hide'); if (h) setTimeout(() => { h.classList.remove('hide'); fx('stinger'); }, Math.max(400, (holdFor(b) - 0.71) * 1000 * 0.55)); }
   setMusic(b.hush ? {} : { ...page.mus, ...(b.mus || {}) });
   if (b.fx) fx(b.fx);
