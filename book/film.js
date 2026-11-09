@@ -330,6 +330,8 @@ const MOVES = [
   ['Where\'s my $300?', 'we havent even started , which work are you referring to?', 2, -2, 'Claims about his records burn his patience.'],
   ['beep boop are you a bot', 'send me a screenshot', 1, -2, 'Bot tests look like baiting.'],
   ['ok signing up now!', 'great, let me know when you are done', 1, 1, 'Eager buys patience back.'],
+  ['Sorry, slow reply. My dog died.', 'sorry to hear that. are you available to start the training now?', 2, 0, 'He types one sad line, then right back to the script.'],
+  ['I\'ve been in a coma since 2019. What year is it?', 'its 2026. you can still do the job, just register first', 3, -1, 'He has to type. Even a coma doesn\'t stop the script.'],
   ['Tell a grown-up and block him', null, 0, 0, 'The best move of all.'],
 ];
 function counterGame(done) {
@@ -342,7 +344,7 @@ function counterGame(done) {
     const go = document.createElement('button'); go.className = 'btn'; go.textContent = 'Continue ▶'; go.onclick = () => done(); words.appendChild(go); };
   const turn = () => {
     if (round >= 5) return finish('Five turns! You kept Charlie busy and gave him nothing at all.');
-    const pool = MOVES.slice(0, 9).sort(() => Math.random() - 0.5).slice(0, 3).concat([MOVES[9]]);
+    const pool = MOVES.slice(0, -1).sort(() => Math.random() - 0.5).slice(0, 3).concat([MOVES[MOVES.length - 1]]);
     say.innerHTML = `<p>${round ? 'Again. What now?' : 'Can you keep Charlie busy without giving him anything?'}</p>`; say.classList.add('on');
     words.innerHTML = meters();
     const box = document.createElement('div'); box.className = 'bar';
