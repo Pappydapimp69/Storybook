@@ -389,9 +389,9 @@ function pick(b) {
   const box = chips(); box.innerHTML = ''; box.setAttribute('role', 'group');
   b.pick.forEach(([label, pred]) => { const bt = document.createElement('button'); bt.className = 'btn'; bt.type = 'button'; bt.textContent = label;
     bt.onclick = () => { box.innerHTML = ''; fx('click'); const say = $('say');
-      if (!pred) { say.innerHTML = '<p>That\'s what you really sent.</p>'; say.classList.add('on'); setTimeout(() => setPlaying(true), 900); return; }
+      if (!pred) { setTimeout(() => setPlaying(true), 400); return; }
       post(you(label) + guess(pred[0]));
-      say.innerHTML = `<p>${esc(pred[1])} You really sent something else:</p>`; say.classList.add('on');
+      say.innerHTML = `<p>${esc(pred[1])}</p>`; say.classList.add('on');
       setTimeout(() => setPlaying(true), 4200); }; box.appendChild(bt); });
   setPlaying(false);
 }
