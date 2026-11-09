@@ -341,7 +341,7 @@ const chips = () => $('chips');
 function post(html) { words.insertAdjacentHTML('beforeend', html); reveal(); }
 function reveal() {
   const fresh = [...words.querySelectorAll('.line:not(.on)')];
-  fresh.forEach((el, i) => setTimeout(() => { el.classList.add('on'); words.scrollTop = words.scrollHeight; }, 380 * i));
+  fresh.forEach((el, i) => setTimeout(() => { el.classList.add('on'); words.scrollTop = words.scrollHeight; }, 180 * i));
   requestAnimationFrame(() => { words.scrollTop = words.scrollHeight; });
 }
 const you = (t, tag) => `<p class="line chat you pred"><b class="who">YOU · YOUR PICK</b>${tag ? `<span class="trick">${tag}</span><br>` : ''}${esc(t)}</p>`;
@@ -377,7 +377,7 @@ const st = { who: 'person' };   // Watch-it path: the cautionary choices
 const vis = (b) => !b.when || b.when(st);
 let interactive = false, speed = 2.6, playing = false, pi = 0, bi = 0, timer = null, beatStart = 0, beatLen = 0, remaining = 0;
 const flat = []; T.forEach((p, i) => p.beats.forEach((b, j) => flat.push({ pi: i, bj: j })));
-const wordsOf = (b) => b.lines.reduce((a, [, t]) => a + t.split(/\s+/).length, 0);
+const wordsOf = (b) => b.lines.reduce((a, [k, t]) => a + t.split(/\s+/).length * (k === 'q' || k === 'x' ? 0.35 : 1), 0);
 const holdFor = (b) => b.hold ?? (b.hush ? b.hush : b.lines.length ? Math.max(1.6, 0.6 + wordsOf(b) / speed + 0.3) + (b.refrain ? 0.71 : 0) : 1.2);
 function ask(b) {
   const box = chips(); box.innerHTML = ''; box.setAttribute('role', 'group');
