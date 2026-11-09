@@ -308,6 +308,25 @@ function fx(name) {
   } } catch (e) { console.warn('fx', name, e); }
 }
 
+
+/* who said each real line, and the trick in it (both sides play) */
+const YOU_TRICKS = [
+  ['Yes', 'PLAY ALONG'], ['How do I get the merchants', 'MAKE HIM EXPLAIN'], ['That sounds like something I can do', 'ACT EAGER'],
+  ['Yes please, and method of payment', 'THE MONEY QUESTION'], ['How am I compensated', 'ASK AGAIN'], ["What's the next step", 'PLAY ALONG'],
+  ["I'm owed $300", 'BLUFF'], ['In a different session', 'FAKE MEMORY'], ['Show me an example', 'MAKE HIM PROVE IT'],
+  ['How do I start training', 'ACT EAGER'], ['I am ready to start the training', 'ACT EAGER']];
+const CHARLIE_TRICKS = [
+  ['Olivia from MASIS STAFFING', 'BORROWED NAME'], ["haven't heard back from you at all", 'KEEP POKING'], ['side gig I\'m doing myself', 'ONE OF US'],
+  ['All our work is done through', 'VAGUE ANSWER'], ['sure, its easy', 'TYPED LIVE'], ['$2800', 'BIG NUMBER'],
+  ['no need to worry', 'ANSWER THE WORRY'], ['how to register your work account', 'NEXT SMALL YES'], ['After you finish the training', 'SCRIPT RUNS ANYWAY'],
+  ['we havent even started', 'CAUGHT YOU'], ['send me a screenshot', 'MAKE YOU PROVE IT'], ['referral code', 'THE CODE THAT COUNTS YOU']];
+const tagFor = (t, list) => (list.find(([k]) => t.includes(k)) || [])[1];
+function realLine(t) {
+  const you = YOU_TRICKS.find(([k]) => t === k || (k.length > 4 && t.includes(k)));
+  const who = you ? 'you' : 'charlie', trick = you ? you[1] : tagFor(t, CHARLIE_TRICKS);
+  return `<p class="line chat ${who}"><b class="who">${who === 'you' ? 'YOU' : 'CHARLIE'}</b>${trick ? `<span class="trick">${trick}</span>` : ''}<br>${esc(t)}</p>`;
+}
+
 /* ============================== player ============================== */
 const st = { who: 'bot', worker: 'text', coins: 'top' };   // Watch-it path: the cautionary choices
 const vis = (b) => !b.when || b.when(st);
@@ -328,7 +347,7 @@ function show(b, page) {
   art.innerHTML = S[scene](props || {});
   const say = $('say'), ml = b.lines.filter(([k]) => k === 'm');
   say.innerHTML = ml.map(([, t]) => `<p>${esc(t)}</p>`).join(''); say.classList.toggle('on', ml.length > 0);
-  words.innerHTML = b.lines.filter(([k]) => k !== 'm').map(([k, t]) => `<p class="line ${({ v: '', m: 'mags', c: 'cap', q: 'chat', k: 'kid', r: 'chat other', t: 'ts' })[k]}">${esc(t).replace(/⟨(.+?)⟩/g, (_, w) => b.refrain ? `<span class="hide" data-w="${w}">${w}</span>` : w)}</p>`).join('');
+  words.innerHTML = b.lines.filter(([k]) => k !== 'm').map(([k, t]) => k === 'q' ? realLine(t) : k === 'r' ? `<p class="line chat charlie"><b class="who">CHARLIE'S SCRIPT</b><span class="trick">BLAME YOU</span><br>${esc(t)}<br><small>(from a seized scam manual, another case)</small></p>` : `<p class="line ${({ v: '', m: 'mags', c: 'cap', q: 'chat', k: 'kid', r: 'chat other', t: 'ts' })[k]}">${esc(t).replace(/⟨(.+?)⟩/g, (_, w) => b.refrain ? `<span class="hide" data-w="${w}">${w}</span>` : w)}</p>`).join('');
   requestAnimationFrame(() => words.querySelectorAll('.line').forEach((el, i) => setTimeout(() => el.classList.add('on'), 250 * i)));
   if (b.refrain) { const h = words.querySelector('.hide'); if (h) setTimeout(() => { h.classList.remove('hide'); fx('stinger'); }, Math.max(400, (holdFor(b) - 0.71) * 1000 * 0.55)); }
   setMusic(b.hush ? {} : { ...page.mus, ...(b.mus || {}) });
