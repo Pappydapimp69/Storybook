@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="A picture-book for kids about a real text scam: a jar of skate money, a slick stranger named Charlie, and a box with a person inside. Your choices change the ending.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="There's Someone in the Box">
+<meta property="og:description" content="A picture-book about a real text scam. Tap to play; your choices change the ending.">
+<meta property="og:image" content="https://pappydapimp69.github.io/storybook/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:url" content="https://pappydapimp69.github.io/storybook/">
+<meta name="twitter:card" content="summary_large_image">
+<title>There's Someone in the Box</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Patrick+Hand&family=Nunito:wght@600;800&display=swap">
+<style>
+/* Woodcut: black ink on bone paper, one blood-orange accent for wrong answers, the coin slot and the boss's edge. */
+:root{
+  --desk:#F3C78F; --page:#FFF6E6; --ink:#4A2A14; --soft:#8A5A35; --hatch:#F2B77F; --accent:#D2553A; --ok:#4E9A64;
+  --brass:#E0A21E; --glow:#FFE7A3; --shadow:#2B1A10; --glass:#FFF0D6; --sky1:#FFD98E; --sky2:#F59E5B; --ground:#D88F5C; --ground2:#C67C4B; --night:#3A2A4A;
+  --serif:"Fredoka","Nunito",system-ui,sans-serif; --sans:"Nunito",system-ui,sans-serif; --hand:"Patrick Hand","Comic Sans MS",cursive;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --desk:#1E2046; --page:#2C2F5C; --ink:#F3EEFF; --soft:#C3BCE6; --hatch:#565A9E; --accent:#FF8A7A; --ok:#8EE0A8;
+  --brass:#FFCB6B; --glow:#FFE3A3; --shadow:#0E0F26; --glass:#3D3768; --sky1:#2B3160; --sky2:#4A4C8C; --ground:#3E3F7A; --ground2:#34356A; --night:#1A1B3A; color-scheme:dark}}
+:root[data-theme="dark"]{--desk:#1E2046; --page:#2C2F5C; --ink:#F3EEFF; --soft:#C3BCE6; --hatch:#565A9E; --accent:#FF8A7A; --ok:#8EE0A8;
+  --brass:#FFCB6B; --glow:#FFE3A3; --shadow:#0E0F26; --glass:#3D3768; --sky1:#2B3160; --sky2:#4A4C8C; --ground:#3E3F7A; --ground2:#34356A; --night:#1A1B3A; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--desk);color:var(--ink);font-family:var(--sans)}
+.shell{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 18px}
+.book{position:relative;width:100%;max-width:880px;background:var(--page);border-radius:26px;overflow:hidden;box-shadow:0 14px 40px rgba(0,0,0,.35)}
+.art{position:relative;aspect-ratio:400/260;max-width:100%}
+.art svg{display:block;width:100%;height:100%}
+.words{min-height:132px;padding:14px 22px 6px;display:flex;flex-direction:column;justify-content:center;gap:6px}
+.line{font-family:var(--serif);font-size:clamp(1.25rem,3vw,1.7rem);line-height:1.38;text-align:center;margin:0;opacity:0;transform:translateY(4px);transition:opacity .25s,transform .25s}
+.line.on{opacity:1;transform:none}
+.say{position:absolute;left:4%;right:30%;top:4%;z-index:2;background:var(--page);border:3px solid var(--ink);border-radius:22px;padding:10px 14px;font:400 clamp(1rem,2.4vw,1.3rem)/1.3 var(--hand);color:var(--ink);box-shadow:0 4px 0 rgba(0,0,0,.12);opacity:0;transition:opacity .25s}
+.say.on{opacity:1}
+.say p{margin:0}.say p+p{margin-top:6px}
+.say::after{content:"";position:absolute;right:-16px;bottom:16px;border:10px solid transparent;border-left:16px solid var(--ink)}
+@media (max-width:560px){.say{right:4%;font-size:1rem}}
+.line.cap{font-family:var(--sans);font-size:.88rem;color:var(--soft);text-align:left}
+.line.cap::before{content:"HOW WE KNOW · ";font-weight:800;letter-spacing:.06em;font-size:.72rem}
+.line.chat{font-family:var(--sans);font-size:1rem;text-align:left;background:var(--glass);border-radius:16px 16px 16px 4px;padding:8px 12px}
+.line.ts{font-family:var(--sans);font-size:.78rem;font-weight:800;letter-spacing:.06em;color:var(--soft);text-align:left}
+.line.kid{font-family:var(--hand);font-size:clamp(1.15rem,2.8vw,1.45rem);text-align:right}
+.line.kid::before{content:"YOU: ";font-family:var(--sans);font-weight:800;font-size:.75rem;color:var(--accent)}
+.line.other::before{content:"REAL SCRIPT · OTHER CASE · "!important}
+.line.chat::before{content:"REAL TEXT · ";font-family:var(--sans);font-weight:800;letter-spacing:.06em;font-size:.72rem;color:var(--soft)}
+.hide{color:transparent;text-shadow:none;border-bottom:3px dashed var(--accent)}
+.bar{display:flex;align-items:center;gap:8px;padding:8px 14px 14px;flex-wrap:wrap}
+.btn{font:800 1rem var(--sans);min-height:48px;min-width:48px;padding:0 16px;border-radius:999px;border:2px solid var(--ink);background:var(--page);color:var(--ink);cursor:pointer}
+.btn.main{background:var(--ink);color:var(--page)}
+.btn:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.prog{flex:1;min-width:80px;height:6px;background:var(--hatch);border-radius:3px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--accent)}
+select.btn{padding:0 10px}
+[hidden]{display:none!important}
+.splash{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;border:0;cursor:pointer;background:linear-gradient(var(--sky1),var(--sky2));color:var(--ink);font-family:var(--serif)}
+.splash .sbig{font:700 clamp(1.6rem,5vw,2.6rem) var(--serif);text-align:center;padding:0 16px}
+.splash .stap{font:800 1.2rem var(--sans);padding:16px 32px;border-radius:999px;border:3px solid var(--ink);background:var(--page)}
+.splash:focus-visible{outline:4px solid var(--accent);outline-offset:-8px}
+@media (prefers-reduced-motion:no-preference){.splash .stap{animation:pulse 1.4s ease-in-out infinite}}
+.poster{position:absolute;top:0;left:0;right:0;aspect-ratio:400/260;display:grid;place-items:center;z-index:3}
+.poster button{font:800 1.3rem var(--sans);min-height:80px;padding:0 34px;border-radius:999px;border:0;background:var(--ink);color:var(--page);box-shadow:0 0 0 6px rgba(0,0,0,.15);cursor:pointer}
+.poster .t{position:absolute;left:0;right:0;bottom:12%;text-align:center;font:700 clamp(1.3rem,4vw,2.2rem) var(--serif);color:var(--ink);text-shadow:0 0 12px var(--page)}
+.poster .s{position:absolute;left:0;right:0;bottom:6%;text-align:center;font:500 .95rem var(--sans);color:var(--soft)}
+.note{font-size:.8rem;color:#bba;max-width:880px;text-align:center;margin:0}
+.k-ink{fill:var(--ink)} .k-page{fill:var(--page)} .k-soft{fill:var(--soft)} .k-hatch{fill:var(--hatch)} .k-acc{fill:var(--accent)} .k-brass{fill:var(--brass)} .k-glow{fill:var(--glow)} .k-glass{fill:var(--glass)} .k-ok{fill:var(--ok)}
+.s-ink{stroke:var(--ink);fill:none;stroke-linecap:round;stroke-linejoin:round} .s-acc{stroke:var(--accent);fill:none} .s-soft{stroke:var(--soft);fill:none}
+.t{font-family:var(--sans);fill:var(--ink)} .tser{font-family:var(--serif);fill:var(--ink)}
+@media (prefers-reduced-motion:no-preference){
+  .bob{animation:bob 3s ease-in-out infinite} .buzz{animation:buzz .18s linear infinite} .fall{animation:fall .6s ease-out both}
+  .flick{animation:flick 1.6s steps(2) infinite} .spin{animation:spin 4s linear infinite} .pulse{animation:pulse 1.4s ease-in-out infinite}
+}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes buzz{0%,100%{transform:translateX(0)}50%{transform:translateX(1.5px)}}
+@keyframes fall{from{transform:translateY(-60px);opacity:0}to{transform:none;opacity:1}}
+@keyframes flick{0%{opacity:1}50%{opacity:.75}}
+@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+.bob,.buzz,.fall{transform-box:fill-box;transform-origin:50% 100%}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <main class="book" aria-label="There's Someone in the Box, a picture-book film">
+    <div class="art" id="art"></div>
+    <div class="say" id="say" aria-live="polite"></div>
+    <button class="splash" id="splash" type="button" aria-label="Tap to start with sound"><span class="sbig">There's Someone in the Box</span><span class="stap">Tap to start ♪</span></button>
+    <div class="poster" id="poster">
+      <button id="play2" type="button">▶ Start the story</button><button id="play" type="button" hidden>Watch</button>
+      <div class="t">There's Someone in the Box</div>
+      <div class="s">A picture book about a text that wasn't what it said · about 3 min · sound on</div>
+    </div>
+    <div class="words" id="words" aria-live="polite"></div>
+    <div class="bar">
+      <button class="btn" id="back" type="button" aria-label="Back one page">⏮</button>
+      <button class="btn main" id="pause" type="button" aria-label="Pause">❚❚</button>
+      <button class="btn" id="next" type="button" aria-label="Next page">⏭</button>
+      <div class="prog" aria-hidden="true"><i id="prog"></i></div>
+      <select class="btn" id="speed" aria-label="Text speed">
+        <option value="1.6">Slow text</option><option value="2.6" selected>Normal text</option><option value="3.6">Fast text</option>
+      </select>
+      <button class="btn" id="snd" type="button" aria-label="Sound on">🔊</button>
+    </div>
+  </main>
+  <p class="note">The story stops at three choices. Your taps change the ending. No sound? Check the silent switch.</p>
+</div>
+
+<script type="module" src="./book/film.js"></script>
+
+</body>
+</html>
