@@ -190,12 +190,12 @@ const T = [
     { art: ['stack', { n: 2 }], fx: 'blip', lines: [['q', 'Our work is straightforward The company provides us with Workhub, a semi-automated system. Our job is to upload the merchants\' original product information to Workhub\'s  system. Once the upload is complete, our work is done.The system\'s then automatically organizes and processes the data, helping merchants keep their product information complete and relevant on their e-commerce pages']], hold: 1.4 },
     { art: ['stack', { n: 3 }], fx: 'blip', lines: [['q', 'Do you have any questions about the job description above? I can give you an example to help you understand it better']], hold: 2.6 }] },
   { page: 3, mus: { theme: .4, pad: .3 }, beats: [
-    { art: ['phone', { mood: 'up' }], lines: [['m', 'What do you ask him?']], pick: [['How do I get the merchants?', null], ['Is this a scam?', ['Our company is a legitimate e-commerce platform. Many people work with us every day.', 'A smooth answer was written before you asked.']], ['Can I get paid in pizza?', ['It\'s daily paid, I\'ll guide you on how to withdraw.', 'Off-script questions get the nearest card.']]] },
+    { art: ['phone', { mood: 'up' }], lines: [['m', 'What do you ask him?']], pick: [['How do I get the merchants?', null], ['Is this a scam?', ['Our company is a legitimate e-commerce platform. Many people work with us every day.', 'A smooth answer was written before you asked.']], ['Can I get paid in pizza?', ['lol. all work is done through the company work hub. can i explain?', 'Off-script questions get the nearest card.']]] },
     { art: ['phone', {}], lines: [['t', '3:17 pm'], ['q', 'How do I get the merchants and their product info']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['q', 'All our work is done through the company\'s work hub. There are thousands of products waiting to be optimized every day.']] },
     { art: ['phone', {}], lines: [['v', 'You played along. Charlie liked that.'], ['t', '3:51 pm'], ['q', 'That sounds like something I can do'], ['c', 'Charlie tapped ❤️ on your message.']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['v', 'Charlie promised lots of money. You asked how you would get paid.'], ['q', 'sure, its easy and flexible, can i now share with you our working hours and the pay?']] },
-    { art: ['phone', { mood: 'up' }], lines: [['m', 'He offers the pay. What do you text back?']], pick: [['Yes please, and method of payment', null], ['Which app pays me?', ['You\'ll see after the training. No need to worry.', 'The money question gets dodged.']], ['Pay me in skates', ['The monthly base pay is $2800, plus separate product based profits.', 'He pastes the pay card anyway.']]] },
+    { art: ['phone', { mood: 'up' }], lines: [['m', 'He offers the pay. What do you text back?']], pick: [['Yes please, and method of payment', null], ['Which app pays me?', ['You\'ll see after the training. No need to worry.', 'The money question gets dodged.']], ['Pay me in skates', ['haha no, you get paid in USD to your bank. can i share the pay now?', 'A joke gets one typed laugh, then back to the pitch.']]] },
     { art: ['phone', {}], lines: [['q', 'Yes please, and method of payment']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['v', 'Charlie talked about the money. He never said how.'], ['q', 'The monthly base pay is $2800, plus separate product based profits.'], ['c', 'The payment question was skipped.']] }] },
   { page: 4, mus: { pad: .3, arp: .3 }, beats: [
@@ -204,7 +204,7 @@ const T = [
     { art: ['phone', {}], lines: [['v', 'So you tried a trick of your own.'], ['t', '11:45 am'], ['q', 'What\'s the next step']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['v', 'Time for a bluff.'], ['q', 'Next, I\'ll show you how to register your work account on the company\'s Workhub.']] }] },
   { page: 5, mus: { pad: .3, arp: .4 }, beats: [
-    { art: ['phone', { mood: 'squint' }], lines: [['m', 'What do you text back?']], pick: [['Bluff: you owe me $300', null], ['ok signing up now!', ['great, let me know when you are done', 'Eager gets a fast, warm reply.']], ['Stop texting me', ['Hi, have you completed your registration?', 'One more nudge tomorrow, then quiet.']], ['beep boop I am also a bot', ['send me a screenshot', 'Weird gets a demand for proof.']]] },
+    { art: ['phone', { mood: 'squint' }], lines: [['m', 'What do you text back?']], pick: [['Bluff: you owe me $300', null], ['ok signing up now!', ['great, let me know when you are done', 'Eager gets a fast, warm reply.']], ['Stop texting me', ['Hi, have you completed your registration?', 'One more nudge tomorrow, then quiet.']], ['beep boop I am also a bot', ['?? are you available to start the training now?', 'Weird gets a shrug, then the script.']]] },
     { art: ['phone', { mood: 'squint' }], lines: [['t', '11:46:49'], ['q', 'I have already completed my work for the day though and I\'m owed $300. Please provide me withdrawal instructions']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['t', '8 seconds later'], ['q', 'After you finish the training, you can start using your work account to work and earn money. Are you available to start the training now?']] },
     { art: ['phone', { buzz: true }], fx: 'blip', lines: [['v', 'This time the words came out messy and lowercase. Somebody real was typing.'], ['t', '34 seconds later'], ['q', 'we havent even started , which work are you referring to?']] },
@@ -395,9 +395,9 @@ function pick(b) {
   b.pick.forEach(([label, pred]) => { const bt = document.createElement('button'); bt.className = 'btn'; bt.type = 'button'; bt.textContent = label;
     bt.onclick = () => { box.innerHTML = ''; fx('click'); const say = $('say');
       if (!pred) { setTimeout(() => setPlaying(true), 400); return; }
-      post(you(label) + guess(pred[0]));
+      post((you(label) + guess(pred[0])).replace(/class="line chat/g, 'class="whatif line chat'));
       say.innerHTML = `<p>${esc(pred[1])}</p>`; say.classList.add('on');
-      setTimeout(() => setPlaying(true), 4200); }; box.appendChild(bt); });
+      setTimeout(() => { words.querySelectorAll('.whatif').forEach((el) => el.remove()); say.classList.remove('on'); setPlaying(true); }, 4200); }; box.appendChild(bt); });
   setPlaying(false);
 }
 function show(b, page) {
